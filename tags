@@ -1,0 +1,237 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/jz/nas/2017A3/spx/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20210905.0/
+BINARIES	Makefile	/^BINARIES=spx_exchange spx_trader$/;"	m
+CC	Makefile	/^CC=gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-Wall -Werror -Wvla -O0 -std=c11 -g -fsanitize=address,leak$/;"	m
+CMFixtureFunction	tests/cmocka.h	/^typedef int (*CMFixtureFunction)(void **state);$/;"	t	typeref:typename:int (*)(void ** state)
+CMOCKA_DEPRECATED	tests/cmocka.h	/^#define CMOCKA_DEPRECATED /;"	d
+CMOCKA_DEPRECATED	tests/cmocka.h	/^#define CMOCKA_DEPRECATED$/;"	d
+CMOCKA_H_	tests/cmocka.h	/^#define CMOCKA_H_$/;"	d
+CMOCKA_PRINTF_ATTRIBUTE	tests/cmocka.h	/^#define CMOCKA_PRINTF_ATTRIBUTE(/;"	d
+CMUnitTest	tests/cmocka.h	/^struct CMUnitTest {$/;"	s
+CMUnitTestFunction	tests/cmocka.h	/^typedef void (*CMUnitTestFunction)(void **state);$/;"	t	typeref:typename:void (*)(void ** state)
+CM_OUTPUT_STDOUT	tests/cmocka.h	/^    CM_OUTPUT_STDOUT,$/;"	e	enum:cm_message_output
+CM_OUTPUT_SUBUNIT	tests/cmocka.h	/^    CM_OUTPUT_SUBUNIT,$/;"	e	enum:cm_message_output
+CM_OUTPUT_TAP	tests/cmocka.h	/^    CM_OUTPUT_TAP,$/;"	e	enum:cm_message_output
+CM_OUTPUT_XML	tests/cmocka.h	/^    CM_OUTPUT_XML,$/;"	e	enum:cm_message_output
+CheckParameterEvent	tests/cmocka.h	/^typedef struct CheckParameterEvent {$/;"	s
+CheckParameterEvent	tests/cmocka.h	/^} CheckParameterEvent;$/;"	t	typeref:struct:CheckParameterEvent
+CheckParameterValue	tests/cmocka.h	/^typedef int (*CheckParameterValue)(const LargestIntegralType value,$/;"	t	typeref:typename:int (*)(const LargestIntegralType value,const LargestIntegralType check_value_data)
+FEE_PERCENTAGE	spx_common.h	/^#define FEE_PERCENTAGE /;"	d
+FIFO_EXCHANGE	spx_common.h	/^#define FIFO_EXCHANGE /;"	d
+FIFO_TRADER	spx_common.h	/^#define FIFO_TRADER /;"	d
+FloatPrintfFormat	tests/cmocka.h	/^# define FloatPrintfFormat /;"	d
+GroupTest	tests/cmocka.h	/^typedef struct GroupTest {$/;"	s
+GroupTest	tests/cmocka.h	/^} GroupTest;$/;"	t	typeref:struct:GroupTest
+LDFLAGS	Makefile	/^LDFLAGS=-lm$/;"	m
+LOG_PREFIX	spx_exchange.h	/^#define LOG_PREFIX /;"	d
+LargestIntegralType	tests/cmocka.h	/^#  define LargestIntegralType /;"	d
+LargestIntegralType	tests/cmocka.h	/^typedef uintmax_t LargestIntegralType;$/;"	t	typeref:typename:uintmax_t
+LargestIntegralTypePrintfFormat	tests/cmocka.h	/^#   define LargestIntegralTypePrintfFormat /;"	d
+LargestIntegralTypePrintfFormat	tests/cmocka.h	/^#  define LargestIntegralTypePrintfFormat /;"	d
+LargestIntegralTypePrintfFormatDecimal	tests/cmocka.h	/^#   define LargestIntegralTypePrintfFormatDecimal /;"	d
+LargestIntegralTypePrintfFormatDecimal	tests/cmocka.h	/^#  define LargestIntegralTypePrintfFormatDecimal /;"	d
+MAX_EVENTS	spx_exchange.c	/^#define MAX_EVENTS /;"	d	file:
+SPX_COMMON_H	spx_common.h	/^#define SPX_COMMON_H$/;"	d
+SPX_EXCHANGE_H	spx_exchange.h	/^#define SPX_EXCHANGE_H$/;"	d
+SPX_TRADER_H	spx_trader.h	/^#define SPX_TRADER_H$/;"	d
+SourceLocation	tests/cmocka.h	/^typedef struct SourceLocation {$/;"	s
+SourceLocation	tests/cmocka.h	/^} SourceLocation;$/;"	t	typeref:struct:SourceLocation
+UNIT_TEST_FUNCTION_TYPE_GROUP_SETUP	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_GROUP_SETUP,$/;"	e	enum:UnitTestFunctionType
+UNIT_TEST_FUNCTION_TYPE_GROUP_TEARDOWN	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_GROUP_TEARDOWN,$/;"	e	enum:UnitTestFunctionType
+UNIT_TEST_FUNCTION_TYPE_SETUP	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_SETUP,$/;"	e	enum:UnitTestFunctionType
+UNIT_TEST_FUNCTION_TYPE_TEARDOWN	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_TEARDOWN,$/;"	e	enum:UnitTestFunctionType
+UNIT_TEST_FUNCTION_TYPE_TEST	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_TEST = 0,$/;"	e	enum:UnitTestFunctionType
+UnitTest	tests/cmocka.h	/^typedef struct UnitTest {$/;"	s
+UnitTest	tests/cmocka.h	/^} UnitTest;$/;"	t	typeref:struct:UnitTest
+UnitTestFunction	tests/cmocka.h	/^typedef void (*UnitTestFunction)(void **state);$/;"	t	typeref:typename:void (*)(void ** state)
+UnitTestFunctionType	tests/cmocka.h	/^typedef enum UnitTestFunctionType {$/;"	g
+UnitTestFunctionType	tests/cmocka.h	/^} UnitTestFunctionType;$/;"	t	typeref:enum:UnitTestFunctionType
+WILL_RETURN_ALWAYS	tests/cmocka.h	/^#define WILL_RETURN_ALWAYS /;"	d
+WILL_RETURN_ONCE	tests/cmocka.h	/^#define WILL_RETURN_ONCE /;"	d
+_POSIX_SOURCE	spx_common.h	/^#define _POSIX_SOURCE$/;"	d
+_UINTPTR_T	tests/cmocka.h	/^# define _UINTPTR_T$/;"	d
+_UINTPTR_T_DEFINED	tests/cmocka.h	/^# define _UINTPTR_T_DEFINED$/;"	d
+__WORDSIZE	tests/cmocka.h	/^#  define __WORDSIZE /;"	d
+__func__	tests/cmocka.h	/^#define __func__ /;"	d
+_unit_test_dummy	tests/cmocka.h	/^static inline void _unit_test_dummy(void **state) {$/;"	f	typeref:typename:void
+_unit_test_setup	tests/cmocka.h	/^#define _unit_test_setup(/;"	d
+_unit_test_teardown	tests/cmocka.h	/^#define _unit_test_teardown(/;"	d
+add_order	spx_exchange.c	/^void add_order(order_node_t *node)$/;"	f	typeref:typename:void
+add_trader_node	spx_exchange.c	/^void add_trader_node(int id, pid_t pid)$/;"	f	typeref:typename:void
+all	Makefile	/^all: $(BINARIES)$/;"	t
+assert_false	tests/cmocka.h	/^#define assert_false(/;"	d
+assert_float_equal	tests/cmocka.h	/^#define assert_float_equal(/;"	d
+assert_float_not_equal	tests/cmocka.h	/^#define assert_float_not_equal(/;"	d
+assert_in_range	tests/cmocka.h	/^#define assert_in_range(/;"	d
+assert_in_set	tests/cmocka.h	/^#define assert_in_set(/;"	d
+assert_int_equal	tests/cmocka.h	/^#define assert_int_equal(/;"	d
+assert_int_not_equal	tests/cmocka.h	/^#define assert_int_not_equal(/;"	d
+assert_memory_equal	tests/cmocka.h	/^#define assert_memory_equal(/;"	d
+assert_memory_not_equal	tests/cmocka.h	/^#define assert_memory_not_equal(/;"	d
+assert_non_null	tests/cmocka.h	/^#define assert_non_null(/;"	d
+assert_not_in_range	tests/cmocka.h	/^#define assert_not_in_range(/;"	d
+assert_not_in_set	tests/cmocka.h	/^#define assert_not_in_set(/;"	d
+assert_null	tests/cmocka.h	/^#define assert_null(/;"	d
+assert_ptr_equal	tests/cmocka.h	/^#define assert_ptr_equal(/;"	d
+assert_ptr_not_equal	tests/cmocka.h	/^#define assert_ptr_not_equal(/;"	d
+assert_return_code	tests/cmocka.h	/^#define assert_return_code(/;"	d
+assert_string_equal	tests/cmocka.h	/^#define assert_string_equal(/;"	d
+assert_string_not_equal	tests/cmocka.h	/^#define assert_string_not_equal(/;"	d
+assert_true	tests/cmocka.h	/^#define assert_true(/;"	d
+buffer	spx_trader.c	/^char buffer[128];$/;"	v	typeref:typename:char[128]
+calloc	tests/cmocka.h	/^#define calloc /;"	d
+cast_ptr_to_largest_integral_type	tests/cmocka.h	/^#define cast_ptr_to_largest_integral_type(/;"	d
+cast_to_largest_integral_type	tests/cmocka.h	/^#define cast_to_largest_integral_type(/;"	d
+cast_to_pointer_integral_type	tests/cmocka.h	/^#define cast_to_pointer_integral_type(/;"	d
+check_expected	tests/cmocka.h	/^#define check_expected(/;"	d
+check_expected	tests/cmocka.h	/^void check_expected(#parameter);$/;"	v	typeref:typename:void
+check_expected_ptr	tests/cmocka.h	/^#define check_expected_ptr(/;"	d
+check_expected_ptr	tests/cmocka.h	/^void check_expected_ptr(#parameter);$/;"	v	typeref:typename:void
+check_value	tests/cmocka.h	/^    CheckParameterValue check_value;$/;"	m	struct:CheckParameterEvent	typeref:typename:CheckParameterValue
+check_value_data	tests/cmocka.h	/^    LargestIntegralType check_value_data;$/;"	m	struct:CheckParameterEvent	typeref:typename:LargestIntegralType
+clean	Makefile	/^clean:$/;"	t
+clean_all	spx_exchange.c	/^void clean_all()$/;"	f	typeref:typename:void
+cm_message_output	tests/cmocka.h	/^enum cm_message_output {$/;"	g
+cmocka_run_group_tests	tests/cmocka.h	/^# define cmocka_run_group_tests(/;"	d
+cmocka_run_group_tests_name	tests/cmocka.h	/^# define cmocka_run_group_tests_name(/;"	d
+cmocka_unit_test	tests/cmocka.h	/^#define cmocka_unit_test(/;"	d
+cmocka_unit_test_prestate	tests/cmocka.h	/^#define cmocka_unit_test_prestate(/;"	d
+cmocka_unit_test_prestate_setup_teardown	tests/cmocka.h	/^#define cmocka_unit_test_prestate_setup_teardown(/;"	d
+cmocka_unit_test_setup	tests/cmocka.h	/^#define cmocka_unit_test_setup(/;"	d
+cmocka_unit_test_setup_teardown	tests/cmocka.h	/^#define cmocka_unit_test_setup_teardown(/;"	d
+cmocka_unit_test_teardown	tests/cmocka.h	/^#define cmocka_unit_test_teardown(/;"	d
+deal_order	spx_exchange.c	/^bool deal_order(order_node_t *a, order_node_t *b)$/;"	f	typeref:typename:bool
+end	spx_trader.c	/^bool end;$/;"	v	typeref:typename:bool
+epfd	spx_exchange.c	/^int epfd = -1;$/;"	v	typeref:typename:int
+ev	spx_exchange.c	/^struct epoll_event ev, events[MAX_EVENTS];$/;"	v	typeref:struct:epoll_event
+events	spx_exchange.c	/^struct epoll_event ev, events[MAX_EVENTS];$/;"	v	typeref:struct:epoll_event[]
+exchagne_fd	spx_exchange.h	/^    int exchagne_fd;$/;"	m	struct:trader_node	typeref:typename:int
+exchange_fd	spx_trader.c	/^int exchange_fd;$/;"	v	typeref:typename:int
+expect_any	tests/cmocka.h	/^#define expect_any(/;"	d
+expect_any	tests/cmocka.h	/^void expect_any(#function, #parameter);$/;"	v	typeref:typename:void
+expect_any_always	tests/cmocka.h	/^#define expect_any_always(/;"	d
+expect_any_always	tests/cmocka.h	/^void expect_any_always(#function, #parameter);$/;"	v	typeref:typename:void
+expect_any_count	tests/cmocka.h	/^#define expect_any_count(/;"	d
+expect_assert_failure	tests/cmocka.h	/^#define expect_assert_failure(/;"	d
+expect_check	tests/cmocka.h	/^#define expect_check(/;"	d
+expect_function_call	tests/cmocka.h	/^#define expect_function_call(/;"	d
+expect_function_call	tests/cmocka.h	/^void expect_function_call(#function);$/;"	v	typeref:typename:void
+expect_function_call_any	tests/cmocka.h	/^#define expect_function_call_any(/;"	d
+expect_function_call_any	tests/cmocka.h	/^void expect_function_call_any(#function);$/;"	v	typeref:typename:void
+expect_function_calls	tests/cmocka.h	/^#define expect_function_calls(/;"	d
+expect_in_range	tests/cmocka.h	/^#define expect_in_range(/;"	d
+expect_in_range_count	tests/cmocka.h	/^#define expect_in_range_count(/;"	d
+expect_in_set	tests/cmocka.h	/^#define expect_in_set(/;"	d
+expect_in_set_count	tests/cmocka.h	/^#define expect_in_set_count(/;"	d
+expect_memory	tests/cmocka.h	/^#define expect_memory(/;"	d
+expect_memory_count	tests/cmocka.h	/^#define expect_memory_count(/;"	d
+expect_not_in_range	tests/cmocka.h	/^#define expect_not_in_range(/;"	d
+expect_not_in_range_count	tests/cmocka.h	/^#define expect_not_in_range_count(/;"	d
+expect_not_in_set	tests/cmocka.h	/^#define expect_not_in_set(/;"	d
+expect_not_in_set_count	tests/cmocka.h	/^#define expect_not_in_set_count(/;"	d
+expect_not_memory	tests/cmocka.h	/^#define expect_not_memory(/;"	d
+expect_not_memory_count	tests/cmocka.h	/^#define expect_not_memory_count(/;"	d
+expect_not_string	tests/cmocka.h	/^#define expect_not_string(/;"	d
+expect_not_string_count	tests/cmocka.h	/^#define expect_not_string_count(/;"	d
+expect_not_value	tests/cmocka.h	/^#define expect_not_value(/;"	d
+expect_not_value_count	tests/cmocka.h	/^#define expect_not_value_count(/;"	d
+expect_string	tests/cmocka.h	/^#define expect_string(/;"	d
+expect_string_count	tests/cmocka.h	/^#define expect_string_count(/;"	d
+expect_value	tests/cmocka.h	/^#define expect_value(/;"	d
+expect_value_count	tests/cmocka.h	/^#define expect_value_count(/;"	d
+fail	tests/cmocka.h	/^#define fail(/;"	d
+fail_msg	tests/cmocka.h	/^#define fail_msg(/;"	d
+file	tests/cmocka.h	/^    const char* file;$/;"	m	struct:SourceLocation	typeref:typename:const char *
+free	tests/cmocka.h	/^#define free /;"	d
+function	tests/cmocka.h	/^    UnitTestFunction function;$/;"	m	struct:UnitTest	typeref:typename:UnitTestFunction
+function_called	tests/cmocka.h	/^#define function_called(/;"	d
+function_type	tests/cmocka.h	/^    UnitTestFunctionType function_type;$/;"	m	struct:UnitTest	typeref:typename:UnitTestFunctionType
+group_test_setup	tests/cmocka.h	/^#define group_test_setup(/;"	d
+group_test_teardown	tests/cmocka.h	/^#define group_test_teardown(/;"	d
+handle_signal	spx_trader.c	/^void handle_signal(int sig)$/;"	f	typeref:typename:void
+head	spx_exchange.c	/^trader_node_t *head = NULL;$/;"	v	typeref:typename:trader_node_t *
+id	spx_exchange.h	/^    int id;$/;"	m	struct:trader_node	typeref:typename:int
+ignore_function_calls	tests/cmocka.h	/^#define ignore_function_calls(/;"	d
+ignore_function_calls	tests/cmocka.h	/^void ignore_function_calls(#function);$/;"	v	typeref:typename:void
+initial_state	tests/cmocka.h	/^    void *initial_state;$/;"	m	struct:CMUnitTest	typeref:typename:void *
+inline	tests/cmocka.h	/^#define inline /;"	d
+line	tests/cmocka.h	/^    int line;$/;"	m	struct:SourceLocation	typeref:typename:int
+location	tests/cmocka.h	/^    SourceLocation location;$/;"	m	struct:CheckParameterEvent	typeref:typename:SourceLocation
+main	spx_exchange.c	/^int main(int argc, char **argv) {$/;"	f	typeref:typename:int
+main	spx_trader.c	/^int main(int argc, char ** argv) {$/;"	f	typeref:typename:int
+malloc	tests/cmocka.h	/^#define malloc /;"	d
+match_orders	spx_exchange.c	/^void match_orders()$/;"	f	typeref:typename:void
+min	spx_exchange.c	/^static inline int min(int a, int b)$/;"	f	typeref:typename:int	file:
+mock	tests/cmocka.h	/^#define mock(/;"	d
+mock_ptr_type	tests/cmocka.h	/^#define mock_ptr_type(/;"	d
+mock_ptr_type	tests/cmocka.h	/^type mock_ptr_type(#type);$/;"	v	typeref:typename:type
+mock_type	tests/cmocka.h	/^#define mock_type(/;"	d
+name	tests/cmocka.h	/^    const char *name;$/;"	m	struct:CMUnitTest	typeref:typename:const char *
+name	tests/cmocka.h	/^    const char* name;$/;"	m	struct:UnitTest	typeref:typename:const char *
+next	spx_exchange.h	/^    struct order_node *next;$/;"	m	struct:order_node	typeref:struct:order_node *
+next	spx_exchange.h	/^    struct trader_node *next;$/;"	m	struct:trader_node	typeref:struct:trader_node *
+notify_all	spx_exchange.c	/^void notify_all(char *message)$/;"	f	typeref:typename:void
+notify_except	spx_exchange.c	/^void notify_except(int id, char *message)$/;"	f	typeref:typename:void
+num	spx_exchange.h	/^    int num;$/;"	m	struct:order_node	typeref:typename:int
+number_of_tests	tests/cmocka.h	/^    const size_t number_of_tests;$/;"	m	struct:GroupTest	typeref:typename:const size_t
+order_head	spx_exchange.c	/^order_node_t *order_head = NULL;$/;"	v	typeref:typename:order_node_t *
+order_id	spx_exchange.h	/^    int order_id;$/;"	m	struct:order_node	typeref:typename:int
+order_lookup	spx_exchange.c	/^order_node_t *order_lookup(int id)$/;"	f	typeref:typename:order_node_t *
+order_node	spx_exchange.h	/^typedef struct order_node {$/;"	s
+order_node_t	spx_exchange.h	/^} order_node_t;$/;"	t	typeref:struct:order_node
+order_remove	spx_exchange.c	/^void order_remove(int id)$/;"	f	typeref:typename:void
+order_tail	spx_exchange.c	/^order_node_t *order_tail = NULL;$/;"	v	typeref:typename:order_node_t *
+parameter_name	tests/cmocka.h	/^    const char *parameter_name;$/;"	m	struct:CheckParameterEvent	typeref:typename:const char *
+pid	spx_exchange.h	/^    pid_t pid;$/;"	m	struct:trader_node	typeref:typename:pid_t
+price	spx_exchange.h	/^    int price;$/;"	m	struct:order_node	typeref:typename:int
+product	spx_exchange.h	/^    char product[20];$/;"	m	struct:order_node	typeref:typename:char[20]
+realloc	tests/cmocka.h	/^#define realloc /;"	d
+run_group_tests	tests/cmocka.h	/^#define run_group_tests(/;"	d
+run_test	tests/cmocka.h	/^#define run_test(/;"	d
+run_test	tests/cmocka.h	/^int run_test(#function);$/;"	v	typeref:typename:int
+run_tests	tests/cmocka.h	/^#define run_tests(/;"	d
+setup	tests/cmocka.h	/^    UnitTestFunction setup;$/;"	m	struct:GroupTest	typeref:typename:UnitTestFunction
+setup_func	tests/cmocka.h	/^    CMFixtureFunction setup_func;$/;"	m	struct:CMUnitTest	typeref:typename:CMFixtureFunction
+signal_handler	spx_exchange.c	/^void signal_handler(int sig)$/;"	f	typeref:typename:void
+skip	tests/cmocka.h	/^#define skip(/;"	d
+startup	spx_exchange.c	/^void startup(int argc, char **argv)$/;"	f	typeref:typename:void
+tail	spx_exchange.c	/^trader_node_t *tail = NULL;$/;"	v	typeref:typename:trader_node_t *
+teardown	tests/cmocka.h	/^    UnitTestFunction teardown;$/;"	m	struct:GroupTest	typeref:typename:UnitTestFunction
+teardown_func	tests/cmocka.h	/^    CMFixtureFunction teardown_func;$/;"	m	struct:CMUnitTest	typeref:typename:CMFixtureFunction
+test_calloc	tests/cmocka.h	/^#define test_calloc(/;"	d
+test_free	tests/cmocka.h	/^#define test_free(/;"	d
+test_func	tests/cmocka.h	/^    CMUnitTestFunction test_func;$/;"	m	struct:CMUnitTest	typeref:typename:CMUnitTestFunction
+test_malloc	tests/cmocka.h	/^#define test_malloc(/;"	d
+test_realloc	tests/cmocka.h	/^#define test_realloc(/;"	d
+tests	tests/cmocka.h	/^    const UnitTest *tests;$/;"	m	struct:GroupTest	typeref:typename:const UnitTest *
+trader_count	spx_exchange.c	/^int trader_count = 0;$/;"	v	typeref:typename:int
+trader_fd	spx_exchange.h	/^    int trader_fd;$/;"	m	struct:trader_node	typeref:typename:int
+trader_fd	spx_trader.c	/^int trader_fd;$/;"	v	typeref:typename:int
+trader_id	spx_exchange.h	/^    int trader_id;$/;"	m	struct:order_node	typeref:typename:int
+trader_lookup	spx_exchange.c	/^trader_node_t *trader_lookup(int fd)$/;"	f	typeref:typename:trader_node_t *
+trader_node	spx_exchange.h	/^typedef struct trader_node{$/;"	s
+trader_node_t	spx_exchange.h	/^} trader_node_t;$/;"	t	typeref:struct:trader_node
+type	spx_exchange.h	/^    char type[8];$/;"	m	struct:order_node	typeref:typename:char[8]
+uintptr_t	tests/cmocka.h	/^      typedef unsigned int uintptr_t;$/;"	t	typeref:typename:unsigned int
+uintptr_t	tests/cmocka.h	/^      typedef unsigned long int uintptr_t;$/;"	t	typeref:typename:unsigned long int
+uintptr_t	tests/cmocka.h	/^    typedef unsigned int uintptr_t;$/;"	t	typeref:typename:unsigned int
+uintptr_t	tests/cmocka.h	/^    typedef unsigned long int uintptr_t;$/;"	t	typeref:typename:unsigned long int
+unit_test	tests/cmocka.h	/^#define unit_test(/;"	d
+unit_test_setup	tests/cmocka.h	/^#define unit_test_setup(/;"	d
+unit_test_setup_teardown	tests/cmocka.h	/^#define unit_test_setup_teardown(/;"	d
+unit_test_teardown	tests/cmocka.h	/^#define unit_test_teardown(/;"	d
+wait_all	spx_exchange.c	/^void wait_all()$/;"	f	typeref:typename:void
+will_return	tests/cmocka.h	/^#define will_return(/;"	d
+will_return_always	tests/cmocka.h	/^#define will_return_always(/;"	d
+will_return_count	tests/cmocka.h	/^#define will_return_count(/;"	d
+will_return_maybe	tests/cmocka.h	/^#define will_return_maybe(/;"	d

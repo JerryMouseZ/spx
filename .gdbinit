@@ -1,4 +1,4 @@
 file spx_exchange 
-set args products.txt spx_trader spx_trader
+set args products.txt ./trader_a
 b main
 r

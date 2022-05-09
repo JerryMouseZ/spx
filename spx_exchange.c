@@ -43,89 +43,97 @@ struct epoll_event ev, events[MAX_EVENTS];
 
 void signal_handler(int sig)
 {
-    int nfds = epoll_wait(epfd, events, MAX_EVENTS, -1);
-    if (nfds == -1) {
-        perror("epoll_wait");
-        exit(EXIT_FAILURE);
-    }
-    
-    char buffer[128];
-    char message[128];
-    for (int i = 0; i < nfds; ++i) {
-        // look up events[n].data.fd and send
-        int fd = events[i].data.fd;
-        current = trader_lookup_fd(fd);
-        assert(current != NULL);
-        int bytes = read(fd, buffer, 128);
-        if (bytes == 0) {
-            // pipe error
-            print_teardown(current->id);
-            assert (epoll_ctl(epfd, EPOLL_CTL_DEL, current->trader_fd, &ev) != -1);
-            assert (epoll_ctl(epfd, EPOLL_CTL_DEL, current->exchagne_fd, &ev) != -1);
-            close(current->exchagne_fd);
-            close(current->trader_fd);
-            current->valid = 0;
-            continue;
+    int nfds = 0;
+    do {
+        nfds = epoll_wait(epfd, events, MAX_EVENTS, -1);
+        if (nfds == -1) {
+            perror("epoll_wait");
+            exit(EXIT_FAILURE);
         }
-
-        spx_log("[T%d] Parsing command: <%s>\n", current->id, buffer);
-        // split the message
-        order_node_t new_order;
-        char *token = strtok(buffer, " ");
-        strcpy(new_order.type, token);
-        token = strtok(NULL, " ");
-        new_order.order_id = atoi(token);
-        token = strtok(NULL, " ");
-        strcpy(new_order.product, token);
-        token = strtok(NULL, " ");
-        new_order.num = atoi(token);
-        token = strtok(NULL, " ");
-        new_order.price = atoi(token);
-
-        // process
-        new_order.trader_id = current->id;
-
-        order_node_t *order_check = NULL;
-        if (strstr(new_order.type, "BUY"))
-            order_check = order_lookup(buy_head, new_order.order_id);
-        else
-            order_check = order_lookup(sell_head, new_order.order_id);
-        if (order_check) {
-            // cancelled if num and price == 0
-            // amended if order_id is the same
-            if (new_order.num == 0 && new_order.price == 0) {
-                // delete the node
-                if (strstr(new_order.type, "BUY"))
-                    order_remove(&buy_head, &buy_tail, new_order.order_id);
-                else
-                    order_remove(&sell_head, &sell_tail, new_order.order_id);
-                sprintf(message, "CANCELLED %d;", new_order.order_id);
-            } else {
-                order_check->num = new_order.num;
-                order_check->price = new_order.price;
-                sprintf(message, "AMENDED %d;", new_order.order_id);
+        
+        if (nfds == 0)
+            break;
+        char buffer[128];
+        char message[128];
+        for (int i = 0; i < nfds; ++i) {
+            // look up events[n].data.fd and send
+            int fd = events[i].data.fd;
+            current = trader_lookup_fd(fd);
+            assert(current != NULL);
+            int bytes = read(fd, buffer, 128);
+            if (bytes == 0) {
+                // pipe error
+                print_teardown(current->id);
+                epoll_ctl(epfd, EPOLL_CTL_DEL, current->trader_fd, &ev);
+                epoll_ctl(epfd, EPOLL_CTL_DEL, current->exchagne_fd, &ev);
+                close(current->exchagne_fd);
+                close(current->trader_fd);
+                current->valid = 0;
+                continue;
             }
-        } else {
-            add_order(&new_order);
-            sprintf(message, "ACCEPTED %d;", new_order.order_id);
+            
+            strstr(buffer, ";")[0] = 0;
+            spx_log("[T%d] Parsing command: <%s>\n", current->id, buffer);
+            // split the message
+            order_node_t new_order;
+            char *token = strtok(buffer, " ");
+            strcpy(new_order.type, token);
+            token = strtok(NULL, " ");
+            new_order.order_id = atoi(token);
+            token = strtok(NULL, " ");
+            strcpy(new_order.product, token);
+            token = strtok(NULL, " ");
+            new_order.num = atoi(token);
+            token = strtok(NULL, " ");
+            new_order.price = atoi(token);
+
+            // process
+            new_order.trader_id = current->id;
+
+            order_node_t *order_check = NULL;
+            if (strstr(new_order.type, "BUY"))
+                order_check = order_lookup(buy_head, new_order.order_id);
+            else
+                order_check = order_lookup(sell_head, new_order.order_id);
+            if (order_check) {
+                // cancelled if num and price == 0
+                // amended if order_id is the same
+                if (new_order.num == 0 && new_order.price == 0) {
+                    // delete the node
+                    if (strstr(new_order.type, "BUY"))
+                        order_remove(&buy_head, &buy_tail, new_order.order_id);
+                    else
+                        order_remove(&sell_head, &sell_tail, new_order.order_id);
+                    sprintf(message, "CANCELLED %d;", new_order.order_id);
+                } else {
+                    order_check->num = new_order.num;
+                    order_check->price = new_order.price;
+                    sprintf(message, "AMENDED %d;", new_order.order_id);
+                }
+            } else {
+                add_order(&new_order);
+                memset(message, 0, 128);
+                sprintf(message, "ACCEPTED %d;", new_order.order_id);
+            }
+
+            write(current->exchagne_fd, message, 128);
+            kill(current->pid, SIGUSR1);
+
+            // notify_except
+            sprintf(message, "MARKET %s %s %d %d;", new_order.type, new_order.product, new_order.num, new_order.price);
+            notify_except(current->id, buffer);
+
+            // match order_list
+            match_orders();
+            report();
         }
-
-        write(current->exchagne_fd, message, 128);
-        kill(current->pid, SIGUSR1);
-
-        // notify_except
-        sprintf(message, "MARKET %s %s %d %d;", new_order.type, new_order.product, new_order.num, new_order.price);
-        notify_except(current->id, buffer);
-
-        // match order_list
-        match_orders();
-        report();
-    }
+    } while (nfds != 0);
 }
 
 void pipe_handler(int sig)
 {
     print_teardown(current->id);
+    
     assert (epoll_ctl(epfd, EPOLL_CTL_DEL, current->trader_fd, &ev) != -1);
     assert (epoll_ctl(epfd, EPOLL_CTL_DEL, current->exchagne_fd, &ev) != -1);
     close(current->exchagne_fd);
@@ -197,7 +205,6 @@ void startup(int argc, char **argv)
             // never reach here
             assert(0);
         }
-
         // parent
         // add pid
         add_trader_node(i - 2, pid);
@@ -345,7 +352,7 @@ void clean_all()
         if (backup->valid) {
             close(backup->exchagne_fd);
             close(backup->trader_fd);
-            print_teardown(node->id);
+            print_teardown(backup->id);
         }
         clean_book(backup->book);
         free(backup);
@@ -552,7 +559,7 @@ void clean_orders(order_node_t *head)
 
 void report()
 {
-    spx_log("\t--ORDERBOOK--\n");
+    printf(LOG_PREFIX "\t--ORDERBOOK--\n");
     // traverse orderbook
     order_book_t *node = book;
 
@@ -564,7 +571,7 @@ void report()
 
     order_node_t *buy_and_sells = copy_and_sort(buy_head);
     while (node) {
-        spx_log("\tProduct: %s; ", node->name);
+        printf(LOG_PREFIX "\tProduct: %s; ", node->name);
         int buy_levels = 0, sell_levels = 0;
 
         // get levels
@@ -608,9 +615,9 @@ void report()
             orders++;
             nums += temp->num;
             if (orders > 1)
-                spx_log("\t\t%s %d @ $%d (%d orders)\n", temp->type, nums, temp->price, orders);
+                printf(LOG_PREFIX "\t\t%s %d @ $%d (%d orders)\n", temp->type, nums, temp->price, orders);
             else
-                spx_log("\t\t%s %d @ $%d (%d order)\n", temp->type, nums, temp->price, orders);
+                printf(LOG_PREFIX "\t\t%s %d @ $%d (%d order)\n", temp->type, nums, temp->price, orders);
 
             temp = temp->next;
         }
@@ -622,10 +629,10 @@ void report()
     if (sell_head)
         sell_head->prev = NULL;
 
-    spx_log("\t--POSITIONS--\n");
+    printf(LOG_PREFIX "\t--POSITIONS--\n");
     trader_node_t *trader = head;
     while (trader) {
-        spx_log("\t\tTrader %d: ", trader->id);
+        printf(LOG_PREFIX "\tTrader %d: ", trader->id);
         order_book_t *trader_book = trader->book;
         while (trader_book) {
             if (trader_book->next)
@@ -664,5 +671,11 @@ void match_orders()
 
 void print_teardown(int id)
 {
+    char name[32];
+    sprintf(name, FIFO_EXCHANGE, id);
+    unlink(name);
+    sprintf(name, FIFO_TRADER, id);
+    unlink(name);
+
     spx_log("Trader %d disconnected\n", id);
 }

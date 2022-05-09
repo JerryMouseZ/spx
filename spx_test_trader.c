@@ -9,23 +9,18 @@ int sigwait(const sigset_t *restrict set, int *restrict sig);
 int trader_fd;
 int exchange_fd;
 char buffer[128];
+char message[128];
 bool end;
 int order_id = 0;
 
 void handle_signal(int sig)
 {
     while (read(exchange_fd, buffer, 128) > 0) {
-        if (strstr(buffer, "SELL")) {
-            int qty = atoi(strstr(buffer + strlen("MARKET SELL "), " ") + 1);
-            if (qty >= 1000){
-                end = true;
-                break;
-            }
-
-            char message[128];
-            sprintf(message, "BUY %d %s", order_id, buffer + strlen("MARKET SELL "));
-            order_id++;
-
+        printf("recving %s\n", buffer);
+        int yes;
+        scanf("%d", &yes);
+        if (yes) {
+            scanf("%s", message);
             write(trader_fd, message, 128);
             kill(getppid(), SIGUSR1);
         }

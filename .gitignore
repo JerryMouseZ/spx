@@ -1,2 +1,5 @@
 spx_exchange
 spx_trader
+*.tar
+*.zip
+tarder*

@@ -345,6 +345,7 @@ void clean_all()
         if (backup->valid) {
             close(backup->exchagne_fd);
             close(backup->trader_fd);
+            print_teardown(node->id);
         }
         clean_book(backup->book);
         free(backup);
@@ -476,7 +477,7 @@ bool deal_order(order_node_t *a, order_node_t *b, int money)
     }
     write(trader->exchagne_fd, fill_message, 128);
     kill(trader->pid, SIGUSR1);
-    
+
     spx_log("Match: Order %d [T%d], New Order %d [T%d], value: $%d, fee: $%d.\n", 
             a->order_id, a->trader_id, b->order_id, b->trader_id, total, fee);
 

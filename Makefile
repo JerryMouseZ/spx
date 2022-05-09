@@ -5,7 +5,9 @@ BINARIES=spx_exchange spx_trader
 
 all: $(BINARIES)
 
-.PHONY: clean
+.PHONY: clean zip
 clean:
 	rm -f $(BINARIES)
 
+zip:
+	zip submission.zip spx_common.h spx_exchange.c spx_exchange.h spx_trader.c spx_trader.h tests/*

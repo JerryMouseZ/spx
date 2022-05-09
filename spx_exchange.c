@@ -175,21 +175,20 @@ void startup(int argc, char **argv)
     }
     fclose(products);
 
-    // name pipes
-    for (int i = 0; i < trader_count; ++i)
-    {
-        char name[32];
-        sprintf(name, FIFO_EXCHANGE, i);
-        mkfifo(name, 0666);
-        spx_log("Created FIFO %s\n", name);
-
-        sprintf(name, FIFO_TRADER, i);
-        mkfifo(name, 0666);
-        spx_log("Created FIFO %s\n", name);
-    }
-
     for (int i = 2; i < argc; ++i) {
+        // name pipes
+        char name[32];
+        sprintf(name, FIFO_EXCHANGE, i - 2);
+        mkfifo(name, 0666);
+        spx_log("Created FIFO %s\n", name);
+
+        sprintf(name, FIFO_TRADER, i - 2);
+        mkfifo(name, 0666);
+        spx_log("Created FIFO %s\n", name);
+
+        spx_log("Starting trader %d (%s)\n", i - 2, argv[i]);
         pid_t pid = fork();
+        assert (pid >= 0);
         if (pid == 0) {
             // child
             char command[12];
@@ -201,7 +200,6 @@ void startup(int argc, char **argv)
 
         // parent
         // add pid
-        spx_log("Starting trader %d (%s)\n", i - 2, argv[i]);
         add_trader_node(i - 2, pid);
     }
 

@@ -20,7 +20,11 @@ void handle_signal(int sig)
         int yes;
         scanf("%d", &yes);
         if (yes) {
-            scanf("%s", message);
+            read(0, message, 128);
+            if (strstr(message, "quit")) {
+                end = true;
+                break;
+            }
             write(trader_fd, message, 128);
             kill(getppid(), SIGUSR1);
         }
@@ -38,26 +42,25 @@ int main(int argc, char ** argv) {
     int id = atoi(argv[1]);
     char name[32];
     sprintf(name, FIFO_EXCHANGE, id);
+    printf("opening %s\n", name);
     exchange_fd = open(name, O_RDONLY);
 
     sprintf(name, FIFO_TRADER, id);
+    printf("opening %s\n", name);
     trader_fd = open(name, O_WRONLY);
 
     // register signal handler
-    sigset_t mask, oldmask;
     signal(SIGUSR1, handle_signal);
-    sigemptyset (&mask);
-    sigaddset (&mask, SIGUSR1);
-
+    
+    printf("trader waiting for signal\n");
     // event loop:
-    sigprocmask (SIG_BLOCK, &mask, &oldmask);
     while (!end)
-        sigsuspend (&oldmask);
-    sigprocmask (SIG_UNBLOCK, &mask, NULL);
+        pause();
+
+    printf("trader exit\n");
     // wait for exchange update (MARKET message)
     // send order
     // wait for exchange confirmation (ACCEPTED message)
-    //
 
     close(exchange_fd);
     close(trader_fd);

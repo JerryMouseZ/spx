@@ -72,7 +72,11 @@ void signal_handler(int sig)
                 continue;
             }
             
-            strstr(buffer, ";")[0] = 0;
+            char *endline = strstr(buffer, ";");
+            if (endline) {
+                *endline = 0;
+            }
+
             spx_log("[T%d] Parsing command: <%s>\n", current->id, buffer);
             // split the message
             order_node_t new_order;
@@ -337,8 +341,9 @@ void notify_except(int id, char *message)
 void wait_all()
 {
     trader_node_t *node = head;
+    int status;
     while (node) {
-        waitpid(node->pid, NULL, 0);
+        waitpid(node->pid, &status, 0);
         node = node->next;
     }
 }

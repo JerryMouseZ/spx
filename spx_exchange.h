@@ -48,7 +48,7 @@ void clean_all();
 
 void clean_orders(order_node_t *head);
 
-trader_node_t *trader_lookup_fd(int fd);
+trader_node_t *trader_lookup_pid(int fd);
 trader_node_t *trader_lookup_id(int id);
 
 void clean_book(order_book_t *head);

@@ -12,22 +12,21 @@ char buffer[128];
 char message[128];
 bool end;
 int order_id = 0;
+FILE *f;
 
 void handle_signal(int sig)
 {
+    if (end)
+        return;
     while (read(exchange_fd, buffer, 128) > 0) {
         printf("recving %s\n", buffer);
-        int yes;
-        scanf("%d", &yes);
-        if (yes) {
-            read(0, message, 128);
-            if (strstr(message, "quit")) {
-                end = true;
-                break;
-            }
-            write(trader_fd, message, 128);
-            kill(getppid(), SIGUSR1);
+        fgets(message, 128, f);
+        if (strstr(message, "quit")) {
+            end = true;
+            break;
         }
+        write(trader_fd, message, 128);
+        kill(getppid(), SIGUSR1);
     }
 }
 
@@ -37,6 +36,10 @@ int main(int argc, char ** argv) {
         printf("Not enough arguments\n");
         return 1;
     }
+
+    // register signal handler
+    f = fopen("input.txt", "r");
+    signal(SIGUSR1, handle_signal);
 
     // connect to named pipes
     int id = atoi(argv[1]);
@@ -48,9 +51,6 @@ int main(int argc, char ** argv) {
     sprintf(name, FIFO_TRADER, id);
     printf("opening %s\n", name);
     trader_fd = open(name, O_WRONLY);
-
-    // register signal handler
-    signal(SIGUSR1, handle_signal);
     
     printf("trader waiting for signal\n");
     // event loop:

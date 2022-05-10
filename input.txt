@@ -1,0 +1,3 @@
+BUY 0 GPU 30 500;
+BUY 1 GPU 31 501;
+quit

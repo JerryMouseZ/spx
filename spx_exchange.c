@@ -313,11 +313,11 @@ void notify_except(int id, char *message)
 
 void wait_all()
 {
-    trader_node_t *node = head;
+    pid_t pid;
     int status;
-    while (node) {
-        waitpid(node->pid, &status, 0);
-        node = node->next;
+    while ((pid = wait(&status)) > 0) {
+        trader_node_t *trader = trader_lookup_pid(pid);
+        printf("%d exit %d\n", trader->id, status);
     }
 }
 

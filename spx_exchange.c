@@ -511,12 +511,14 @@ order_node_t* sort(order_node_t *head)
         while (temp->next) {
             if (temp->price < temp->next->price) {
                 memcpy(&tempval, &temp, sizeof(order_node_t));
-                temp->order_id = temp->next->order_id;
+
                 temp->num = temp->next->num;
+                temp->order_id = temp->next->order_id;
                 temp->price = temp->next->price;
                 strcpy(temp->product, temp->next->product);
                 temp->trader_id = temp->next->trader_id;
                 strcpy(temp->type, temp->next->type);
+
                 temp->next->num = tempval.num;
                 temp->next->order_id = tempval.order_id;
                 temp->next->price = tempval.price;

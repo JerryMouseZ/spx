@@ -16,22 +16,6 @@ FILE *f;
 
 void handle_signal(int sig)
 {
-    if (end)
-        return;
-    while (read(exchange_fd, buffer, 128) > 0) {
-        printf("recving %s\n", buffer);
-        if (fgets(message, 128, f) == NULL) {
-            end = true;
-            return;
-        }
-
-        if (strstr(message, "quit")) {
-            end = true;
-            break;
-        }
-        write(trader_fd, message, 128);
-        kill(getppid(), SIGUSR1);
-    }
 }
 
 
@@ -58,8 +42,20 @@ int main(int argc, char ** argv) {
     
     printf("trader waiting for signal\n");
     // event loop:
-    while (!end)
-        pause();
+    while (read(exchange_fd, buffer, 128) > 0) {
+        printf("recving %s\n", buffer);
+        if (fgets(message, 128, f) == NULL) {
+            end = true;
+            break;
+        }
+
+        if (strstr(message, "quit")) {
+            end = true;
+            break;
+        }
+        write(trader_fd, message, 128);
+        kill(getppid(), SIGUSR1);
+    }
 
     printf("trader exit\n");
     // wait for exchange update (MARKET message)

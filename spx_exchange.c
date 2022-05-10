@@ -484,7 +484,7 @@ bool deal_order(order_node_t *a, order_node_t *b, int money)
     return false;
 }
 
-order_node_t* copy_and_sort(order_node_t *head)
+order_node_t *copy(order_node_t *head)
 {
     order_node_t *old = head, *new = calloc(1, sizeof(order_node_t));
     order_node_t *tail = new;
@@ -497,32 +497,38 @@ order_node_t* copy_and_sort(order_node_t *head)
             tail = tail->next;
         }
     }
+    return new;
+}
 
+order_node_t* sort(order_node_t *head)
+{
     // sort new head
-    order_node_t* tempval;
-    order_node_t *node = new->next, *key = NULL;
+    order_node_t tempval;
+    order_node_t *node = head, *temp = NULL;
     // 插入排序
     while (node) {
-        key = node;
-        while (key != NULL && key->prev != NULL && key->price > key->prev->price) {
-            // swap key and key->prev
-            tempval = key->prev;
-            key->prev = tempval->prev;
-            tempval->next = key->next;
-
-            if (tempval->prev)
-                tempval->prev->next = key;
-            tempval->prev = key;
-
-            if (key->next)
-                key->next->prev = tempval;
-            key->next = tempval;
-            key = key->prev;
+        temp = node;
+        while (temp->next) {
+            if (temp->price < temp->next->price) {
+                memcpy(&tempval, &temp, sizeof(order_node_t));
+                temp->order_id = temp->next->order_id;
+                temp->num = temp->next->num;
+                temp->price = temp->next->price;
+                strcpy(temp->product, temp->next->product);
+                temp->trader_id = temp->next->trader_id;
+                strcpy(temp->type, temp->next->type);
+                temp->next->num = tempval.num;
+                temp->next->order_id = tempval.order_id;
+                temp->next->price = tempval.price;
+                strcpy(temp->next->product, tempval.product);
+                temp->next->trader_id = tempval.trader_id;
+                strcpy(temp->next->type, tempval.type);
+            }
+            temp = temp->next;
         }
         node = node->next;
     }
-
-    return new;
+    return head;
 }
 
 void clean_orders(order_node_t *head)
@@ -547,7 +553,9 @@ void report()
     if (sell_head)
         sell_head->prev = buy_tail;
 
-    order_node_t *buy_and_sells = copy_and_sort(buy_head);
+    order_node_t *buy_and_sells = copy(buy_head);
+    buy_and_sells = sort(buy_and_sells);
+
     while (node) {
         printf(LOG_PREFIX "\tProduct: %s; ", node->name);
         int buy_levels = 0, sell_levels = 0;

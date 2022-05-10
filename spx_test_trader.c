@@ -20,7 +20,11 @@ void handle_signal(int sig)
         return;
     while (read(exchange_fd, buffer, 128) > 0) {
         printf("recving %s\n", buffer);
-        fgets(message, 128, f);
+        if (fgets(message, 128, f) == NULL) {
+            end = true;
+            return;
+        }
+
         if (strstr(message, "quit")) {
             end = true;
             break;

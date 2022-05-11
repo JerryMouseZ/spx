@@ -4,12 +4,12 @@
 !_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
-!_TAG_PROC_CWD	/home/jz/nas/2017A3/spx/	//
+!_TAG_PROC_CWD	/home/jz/nas/spx/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
 !_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20210905.0/
-BINARIES	Makefile	/^BINARIES=spx_exchange spx_trader$/;"	m
+BINARIES	Makefile	/^BINARIES=spx_exchange spx_trader spx_test_trader$/;"	m
 CC	Makefile	/^CC=gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS=-Wall -Werror -Wvla -O0 -std=c11 -g -fsanitize=address,leak $(DEFINE)$/;"	m
 CMFixtureFunction	tests/cmocka.h	/^typedef int (*CMFixtureFunction)(void **state);$/;"	t	typeref:typename:int (*)(void ** state)
@@ -40,12 +40,12 @@ LargestIntegralTypePrintfFormat	tests/cmocka.h	/^#   define LargestIntegralTypeP
 LargestIntegralTypePrintfFormat	tests/cmocka.h	/^#  define LargestIntegralTypePrintfFormat /;"	d
 LargestIntegralTypePrintfFormatDecimal	tests/cmocka.h	/^#   define LargestIntegralTypePrintfFormatDecimal /;"	d
 LargestIntegralTypePrintfFormatDecimal	tests/cmocka.h	/^#  define LargestIntegralTypePrintfFormatDecimal /;"	d
-MAX_EVENTS	spx_exchange.c	/^#define MAX_EVENTS /;"	d	file:
 SPX_COMMON_H	spx_common.h	/^#define SPX_COMMON_H$/;"	d
 SPX_EXCHANGE_H	spx_exchange.h	/^#define SPX_EXCHANGE_H$/;"	d
 SPX_TRADER_H	spx_trader.h	/^#define SPX_TRADER_H$/;"	d
 SourceLocation	tests/cmocka.h	/^typedef struct SourceLocation {$/;"	s
 SourceLocation	tests/cmocka.h	/^} SourceLocation;$/;"	t	typeref:struct:SourceLocation
+Trader	spx_exchange.h	/^typedef struct Trader {$/;"	s
 UNIT_TEST_FUNCTION_TYPE_GROUP_SETUP	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_GROUP_SETUP,$/;"	e	enum:UnitTestFunctionType
 UNIT_TEST_FUNCTION_TYPE_GROUP_TEARDOWN	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_GROUP_TEARDOWN,$/;"	e	enum:UnitTestFunctionType
 UNIT_TEST_FUNCTION_TYPE_SETUP	tests/cmocka.h	/^    UNIT_TEST_FUNCTION_TYPE_SETUP,$/;"	e	enum:UnitTestFunctionType
@@ -61,15 +61,12 @@ WILL_RETURN_ONCE	tests/cmocka.h	/^#define WILL_RETURN_ONCE /;"	d
 _POSIX_SOURCE	spx_common.h	/^#define _POSIX_SOURCE$/;"	d
 _UINTPTR_T	tests/cmocka.h	/^# define _UINTPTR_T$/;"	d
 _UINTPTR_T_DEFINED	tests/cmocka.h	/^# define _UINTPTR_T_DEFINED$/;"	d
+_XOPEN_SOURCE	spx_exchange.c	/^#define _XOPEN_SOURCE /;"	d	file:
 __WORDSIZE	tests/cmocka.h	/^#  define __WORDSIZE /;"	d
 __func__	tests/cmocka.h	/^#define __func__ /;"	d
 _unit_test_dummy	tests/cmocka.h	/^static inline void _unit_test_dummy(void **state) {$/;"	f	typeref:typename:void
 _unit_test_setup	tests/cmocka.h	/^#define _unit_test_setup(/;"	d
 _unit_test_teardown	tests/cmocka.h	/^#define _unit_test_teardown(/;"	d
-add_order	spx_exchange.c	/^void add_order(order_node_t *node)$/;"	f	typeref:typename:void
-add_order_node	spx_exchange.c	/^void add_order_node(order_node_t **head, order_node_t **tail, order_node_t *new_node)$/;"	f	typeref:typename:void
-add_products	spx_exchange.c	/^void add_products(char *name)$/;"	f	typeref:typename:void
-add_trader_node	spx_exchange.c	/^void add_trader_node(int id, pid_t pid)$/;"	f	typeref:typename:void
 all	Makefile	/^all: $(BINARIES)$/;"	t
 assert_false	tests/cmocka.h	/^#define assert_false(/;"	d
 assert_float_equal	tests/cmocka.h	/^#define assert_float_equal(/;"	d
@@ -91,14 +88,11 @@ assert_string_equal	tests/cmocka.h	/^#define assert_string_equal(/;"	d
 assert_string_not_equal	tests/cmocka.h	/^#define assert_string_not_equal(/;"	d
 assert_true	tests/cmocka.h	/^#define assert_true(/;"	d
 begin	trader_b.c	/^bool begin = false;$/;"	v	typeref:typename:bool
-book	spx_exchange.c	/^order_book_t *book = NULL;$/;"	v	typeref:typename:order_book_t *
-book	spx_exchange.h	/^    order_book_t *book;$/;"	m	struct:trader_node	typeref:typename:order_book_t *
-book_tail	spx_exchange.c	/^order_book_t *book_tail = NULL;$/;"	v	typeref:typename:order_book_t *
+buffer	spx_test_trader.c	/^char buffer[128];$/;"	v	typeref:typename:char[128]
 buffer	spx_trader.c	/^char buffer[128];$/;"	v	typeref:typename:char[128]
 buffer	trader_a.c	/^char buffer[128];$/;"	v	typeref:typename:char[128]
 buffer	trader_b.c	/^char buffer[128];$/;"	v	typeref:typename:char[128]
-buy_head	spx_exchange.c	/^order_node_t *buy_head = NULL;$/;"	v	typeref:typename:order_node_t *
-buy_tail	spx_exchange.c	/^order_node_t *buy_tail = NULL;$/;"	v	typeref:typename:order_node_t *
+building_book	spx_exchange.c	/^void building_book(const char *filename)$/;"	f	typeref:typename:void
 calloc	tests/cmocka.h	/^#define calloc /;"	d
 cast_ptr_to_largest_integral_type	tests/cmocka.h	/^#define cast_ptr_to_largest_integral_type(/;"	d
 cast_to_largest_integral_type	tests/cmocka.h	/^#define cast_to_largest_integral_type(/;"	d
@@ -109,10 +103,10 @@ check_expected_ptr	tests/cmocka.h	/^#define check_expected_ptr(/;"	d
 check_expected_ptr	tests/cmocka.h	/^void check_expected_ptr(#parameter);$/;"	v	typeref:typename:void
 check_value	tests/cmocka.h	/^    CheckParameterValue check_value;$/;"	m	struct:CheckParameterEvent	typeref:typename:CheckParameterValue
 check_value_data	tests/cmocka.h	/^    LargestIntegralType check_value_data;$/;"	m	struct:CheckParameterEvent	typeref:typename:LargestIntegralType
+child_handler	spx_exchange.c	/^void child_handler(int sig, siginfo_t* info, void *context)$/;"	f	typeref:typename:void
 clean	Makefile	/^clean:$/;"	t
 clean_all	spx_exchange.c	/^void clean_all()$/;"	f	typeref:typename:void
-clean_book	spx_exchange.c	/^void clean_book(order_book_t *head)$/;"	f	typeref:typename:void
-clean_orders	spx_exchange.c	/^void clean_orders(order_node_t *head)$/;"	f	typeref:typename:void
+clean_pipe	spx_exchange.c	/^void clean_pipe(int id)$/;"	f	typeref:typename:void
 cm_message_output	tests/cmocka.h	/^enum cm_message_output {$/;"	g
 cmocka_run_group_tests	tests/cmocka.h	/^# define cmocka_run_group_tests(/;"	d
 cmocka_run_group_tests_name	tests/cmocka.h	/^# define cmocka_run_group_tests_name(/;"	d
@@ -122,20 +116,18 @@ cmocka_unit_test_prestate_setup_teardown	tests/cmocka.h	/^#define cmocka_unit_te
 cmocka_unit_test_setup	tests/cmocka.h	/^#define cmocka_unit_test_setup(/;"	d
 cmocka_unit_test_setup_teardown	tests/cmocka.h	/^#define cmocka_unit_test_setup_teardown(/;"	d
 cmocka_unit_test_teardown	tests/cmocka.h	/^#define cmocka_unit_test_teardown(/;"	d
-copy_and_sort	spx_exchange.c	/^order_node_t* copy_and_sort(order_node_t *head)$/;"	f	typeref:typename:order_node_t *
-copy_book	spx_exchange.c	/^order_book_t* copy_book()$/;"	f	typeref:typename:order_book_t *
-current	spx_exchange.c	/^trader_node_t *current;$/;"	v	typeref:typename:trader_node_t *
-deal_order	spx_exchange.c	/^bool deal_order(order_node_t *a, order_node_t *b, int money)$/;"	f	typeref:typename:bool
+connect_pipes	spx_exchange.c	/^void connect_pipes(int count)$/;"	f	typeref:typename:void
+creating_pipe	spx_exchange.c	/^void creating_pipe(int count)$/;"	f	typeref:typename:void
+end	spx_exchange.c	/^bool end;$/;"	v	typeref:typename:bool
+end	spx_test_trader.c	/^bool end;$/;"	v	typeref:typename:bool
 end	spx_trader.c	/^bool end;$/;"	v	typeref:typename:bool
 end	trader_a.c	/^bool end;$/;"	v	typeref:typename:bool
 end	trader_b.c	/^bool end = false;$/;"	v	typeref:typename:bool
-epfd	spx_exchange.c	/^int epfd = -1;$/;"	v	typeref:typename:int
-ev	spx_exchange.c	/^struct epoll_event ev, events[MAX_EVENTS];$/;"	v	typeref:struct:epoll_event
-events	spx_exchange.c	/^struct epoll_event ev, events[MAX_EVENTS];$/;"	v	typeref:struct:epoll_event[]
-exchagne_fd	spx_exchange.h	/^    int exchagne_fd;$/;"	m	struct:trader_node	typeref:typename:int
+exchange_fd	spx_test_trader.c	/^int exchange_fd;$/;"	v	typeref:typename:int
 exchange_fd	spx_trader.c	/^int exchange_fd;$/;"	v	typeref:typename:int
 exchange_fd	trader_a.c	/^int exchange_fd;$/;"	v	typeref:typename:int
 exchange_fd	trader_b.c	/^int exchange_fd;$/;"	v	typeref:typename:int
+exfd	spx_exchange.h	/^    int exfd; \/\/ exchange fd$/;"	m	struct:Trader	typeref:typename:int
 expect_any	tests/cmocka.h	/^#define expect_any(/;"	d
 expect_any	tests/cmocka.h	/^void expect_any(#function, #parameter);$/;"	v	typeref:typename:void
 expect_any_always	tests/cmocka.h	/^#define expect_any_always(/;"	d
@@ -168,6 +160,7 @@ expect_string	tests/cmocka.h	/^#define expect_string(/;"	d
 expect_string_count	tests/cmocka.h	/^#define expect_string_count(/;"	d
 expect_value	tests/cmocka.h	/^#define expect_value(/;"	d
 expect_value_count	tests/cmocka.h	/^#define expect_value_count(/;"	d
+f	spx_test_trader.c	/^FILE *f;$/;"	v	typeref:typename:FILE *
 fail	tests/cmocka.h	/^#define fail(/;"	d
 fail_msg	tests/cmocka.h	/^#define fail_msg(/;"	d
 fees	spx_exchange.c	/^int fees = 0;$/;"	v	typeref:typename:int
@@ -178,71 +171,64 @@ function_called	tests/cmocka.h	/^#define function_called(/;"	d
 function_type	tests/cmocka.h	/^    UnitTestFunctionType function_type;$/;"	m	struct:UnitTest	typeref:typename:UnitTestFunctionType
 group_test_setup	tests/cmocka.h	/^#define group_test_setup(/;"	d
 group_test_teardown	tests/cmocka.h	/^#define group_test_teardown(/;"	d
+handle_event	spx_exchange.c	/^void handle_event(int id)$/;"	f	typeref:typename:void
+handle_signal	spx_test_trader.c	/^void handle_signal(int sig)$/;"	f	typeref:typename:void
 handle_signal	spx_trader.c	/^void handle_signal(int sig)$/;"	f	typeref:typename:void
 handle_signal	trader_a.c	/^void handle_signal(int sig)$/;"	f	typeref:typename:void
 handle_signal	trader_b.c	/^void handle_signal(int sig)$/;"	f	typeref:typename:void
-head	spx_exchange.c	/^trader_node_t *head = NULL;$/;"	v	typeref:typename:trader_node_t *
-id	spx_exchange.h	/^    int id;$/;"	m	struct:trader_node	typeref:typename:int
+head	spx_exchange.c	/^int head;$/;"	v	typeref:typename:int
 ignore_function_calls	tests/cmocka.h	/^#define ignore_function_calls(/;"	d
 ignore_function_calls	tests/cmocka.h	/^void ignore_function_calls(#function);$/;"	v	typeref:typename:void
 initial_state	tests/cmocka.h	/^    void *initial_state;$/;"	m	struct:CMUnitTest	typeref:typename:void *
 inline	tests/cmocka.h	/^#define inline /;"	d
+invalid	spx_exchange.h	/^    bool invalid; \/\/ if true the trader has exit$/;"	m	struct:Trader	typeref:typename:bool
+lauch_binary	spx_exchange.c	/^void lauch_binary(int argc, char **argv)$/;"	f	typeref:typename:void
 line	tests/cmocka.h	/^    int line;$/;"	m	struct:SourceLocation	typeref:typename:int
 location	tests/cmocka.h	/^    SourceLocation location;$/;"	m	struct:CheckParameterEvent	typeref:typename:SourceLocation
 main	spx_exchange.c	/^int main(int argc, char **argv) {$/;"	f	typeref:typename:int
+main	spx_test_trader.c	/^int main(int argc, char ** argv) {$/;"	f	typeref:typename:int
 main	spx_trader.c	/^int main(int argc, char ** argv) {$/;"	f	typeref:typename:int
 main	trader_a.c	/^int main(int argc, char ** argv) {$/;"	f	typeref:typename:int
 main	trader_b.c	/^int main(int argc, char ** argv) {$/;"	f	typeref:typename:int
+main_loop	spx_exchange.c	/^void main_loop()$/;"	f	typeref:typename:void
 malloc	tests/cmocka.h	/^#define malloc /;"	d
-match_orders	spx_exchange.c	/^void match_orders()$/;"	f	typeref:typename:void
+message	spx_test_trader.c	/^char message[128];$/;"	v	typeref:typename:char[128]
 min	spx_exchange.c	/^static inline int min(int a, int b)$/;"	f	typeref:typename:int	file:
 mock	tests/cmocka.h	/^#define mock(/;"	d
 mock_ptr_type	tests/cmocka.h	/^#define mock_ptr_type(/;"	d
 mock_ptr_type	tests/cmocka.h	/^type mock_ptr_type(#type);$/;"	v	typeref:typename:type
 mock_type	tests/cmocka.h	/^#define mock_type(/;"	d
-name	spx_exchange.h	/^    char name[20];$/;"	m	struct:order_book	typeref:typename:char[20]
 name	tests/cmocka.h	/^    const char *name;$/;"	m	struct:CMUnitTest	typeref:typename:const char *
 name	tests/cmocka.h	/^    const char* name;$/;"	m	struct:UnitTest	typeref:typename:const char *
-next	spx_exchange.h	/^    struct order_book *next;$/;"	m	struct:order_book	typeref:struct:order_book *
-next	spx_exchange.h	/^    struct order_node *next;$/;"	m	struct:order_node	typeref:struct:order_node *
-next	spx_exchange.h	/^    struct trader_node *next;$/;"	m	struct:trader_node	typeref:struct:trader_node *
 notify_all	spx_exchange.c	/^void notify_all(char *message)$/;"	f	typeref:typename:void
 notify_except	spx_exchange.c	/^void notify_except(int id, char *message)$/;"	f	typeref:typename:void
-num	spx_exchange.h	/^    int num;$/;"	m	struct:order_book	typeref:typename:int
-num	spx_exchange.h	/^    int num;$/;"	m	struct:order_node	typeref:typename:int
 number_of_tests	tests/cmocka.h	/^    const size_t number_of_tests;$/;"	m	struct:GroupTest	typeref:typename:const size_t
-order_book	spx_exchange.h	/^typedef struct order_book {$/;"	s
-order_book_t	spx_exchange.h	/^} order_book_t;$/;"	t	typeref:struct:order_book
-order_id	spx_exchange.h	/^    int order_id;$/;"	m	struct:order_node	typeref:typename:int
+order_buy	spx_exchange.c	/^void order_buy(int trader_id, char *buffer)$/;"	f	typeref:typename:void
+order_id	spx_test_trader.c	/^int order_id = 0;$/;"	v	typeref:typename:int
 order_id	spx_trader.c	/^int order_id = 0;$/;"	v	typeref:typename:int
 order_id	trader_a.c	/^int order_id = 0;$/;"	v	typeref:typename:int
 order_id	trader_b.c	/^int order_id = 0;$/;"	v	typeref:typename:int
-order_lookup	spx_exchange.c	/^order_node_t *order_lookup(order_node_t *order_head, int id)$/;"	f	typeref:typename:order_node_t *
-order_node	spx_exchange.h	/^typedef struct order_node {$/;"	s
-order_node_t	spx_exchange.h	/^} order_node_t;$/;"	t	typeref:struct:order_node
-order_remove	spx_exchange.c	/^void order_remove(order_node_t **order_head, order_node_t **order_tail, int id)$/;"	f	typeref:typename:void
+order_remove	spx_exchange.c	/^void order_remove(int trader_id, char *buffer)$/;"	f	typeref:typename:void
+order_sell	spx_exchange.c	/^void order_sell(int trader_id, char *buffer)$/;"	f	typeref:typename:void
+order_update	spx_exchange.c	/^void order_update(int trader_id, char *buffer)$/;"	f	typeref:typename:void
 parameter_name	tests/cmocka.h	/^    const char *parameter_name;$/;"	m	struct:CheckParameterEvent	typeref:typename:const char *
-pid	spx_exchange.h	/^    pid_t pid;$/;"	m	struct:trader_node	typeref:typename:pid_t
+pid	spx_exchange.h	/^    int pid;$/;"	m	struct:Trader	typeref:typename:int
 pipe_handler	spx_exchange.c	/^void pipe_handler(int sig)$/;"	f	typeref:typename:void
-prev	spx_exchange.h	/^    struct order_node *prev;$/;"	m	struct:order_node	typeref:struct:order_node *
-price	spx_exchange.h	/^    int price;$/;"	m	struct:order_node	typeref:typename:int
-print_teardown	spx_exchange.c	/^void print_teardown(int id)$/;"	f	typeref:typename:void
-product	spx_exchange.h	/^    char product[20];$/;"	m	struct:order_node	typeref:typename:char[20]
+print_usage	spx_exchange.c	/^void print_usage(int argc, char **argv)$/;"	f	typeref:typename:void
+read_message	spx_common.h	/^static inline int read_message(int fd, char *buffer)$/;"	f	typeref:typename:int
 realloc	tests/cmocka.h	/^#define realloc /;"	d
-report	spx_exchange.c	/^void report()$/;"	f	typeref:typename:void
 run_group_tests	tests/cmocka.h	/^#define run_group_tests(/;"	d
 run_test	tests/cmocka.h	/^#define run_test(/;"	d
 run_test	tests/cmocka.h	/^int run_test(#function);$/;"	v	typeref:typename:int
 run_tests	tests/cmocka.h	/^#define run_tests(/;"	d
-sell_head	spx_exchange.c	/^order_node_t *sell_head = NULL;$/;"	v	typeref:typename:order_node_t *
-sell_tail	spx_exchange.c	/^order_node_t *sell_tail = NULL;$/;"	v	typeref:typename:order_node_t *
 setup	tests/cmocka.h	/^    UnitTestFunction setup;$/;"	m	struct:GroupTest	typeref:typename:UnitTestFunction
 setup_func	tests/cmocka.h	/^    CMFixtureFunction setup_func;$/;"	m	struct:CMUnitTest	typeref:typename:CMFixtureFunction
-signal_handler	spx_exchange.c	/^void signal_handler(int sig)$/;"	f	typeref:typename:void
+sigfifos	spx_exchange.c	/^int sigfifos[10]; \/\/ store signal fifo$/;"	v	typeref:typename:int[10]
+signal_handler	spx_exchange.c	/^void signal_handler(int sig, siginfo_t *info, void *context)$/;"	f	typeref:typename:void
 skip	tests/cmocka.h	/^#define skip(/;"	d
 spx_log	spx_exchange.h	/^#define spx_log(/;"	d
 startup	spx_exchange.c	/^void startup(int argc, char **argv)$/;"	f	typeref:typename:void
-tail	spx_exchange.c	/^trader_node_t *tail = NULL;$/;"	v	typeref:typename:trader_node_t *
+tail	spx_exchange.c	/^int tail;$/;"	v	typeref:typename:int
 teardown	tests/cmocka.h	/^    UnitTestFunction teardown;$/;"	m	struct:GroupTest	typeref:typename:UnitTestFunction
 teardown_func	tests/cmocka.h	/^    CMFixtureFunction teardown_func;$/;"	m	struct:CMUnitTest	typeref:typename:CMFixtureFunction
 test_calloc	tests/cmocka.h	/^#define test_calloc(/;"	d
@@ -251,18 +237,14 @@ test_func	tests/cmocka.h	/^    CMUnitTestFunction test_func;$/;"	m	struct:CMUnit
 test_malloc	tests/cmocka.h	/^#define test_malloc(/;"	d
 test_realloc	tests/cmocka.h	/^#define test_realloc(/;"	d
 tests	tests/cmocka.h	/^    const UnitTest *tests;$/;"	m	struct:GroupTest	typeref:typename:const UnitTest *
-total_price	spx_exchange.h	/^    int total_price;$/;"	m	struct:order_book	typeref:typename:int
-trader_count	spx_exchange.c	/^int trader_count = 0;$/;"	v	typeref:typename:int
-trader_fd	spx_exchange.h	/^    int trader_fd;$/;"	m	struct:trader_node	typeref:typename:int
+trader_fd	spx_test_trader.c	/^int trader_fd;$/;"	v	typeref:typename:int
 trader_fd	spx_trader.c	/^int trader_fd;$/;"	v	typeref:typename:int
 trader_fd	trader_a.c	/^int trader_fd;$/;"	v	typeref:typename:int
 trader_fd	trader_b.c	/^int trader_fd;$/;"	v	typeref:typename:int
-trader_id	spx_exchange.h	/^    int trader_id;$/;"	m	struct:order_node	typeref:typename:int
-trader_lookup_fd	spx_exchange.c	/^trader_node_t *trader_lookup_fd(int fd)$/;"	f	typeref:typename:trader_node_t *
-trader_lookup_id	spx_exchange.c	/^trader_node_t *trader_lookup_id(int id)$/;"	f	typeref:typename:trader_node_t *
-trader_node	spx_exchange.h	/^typedef struct trader_node{$/;"	s
-trader_node_t	spx_exchange.h	/^} trader_node_t;$/;"	t	typeref:struct:trader_node
-type	spx_exchange.h	/^    char type[8];$/;"	m	struct:order_node	typeref:typename:char[8]
+trader_num	spx_exchange.c	/^int trader_num = 0;$/;"	v	typeref:typename:int
+trader_t	spx_exchange.h	/^} trader_t;$/;"	t	typeref:struct:Trader
+traders	spx_exchange.c	/^trader_t *traders = NULL; \/\/ arraries for traders$/;"	v	typeref:typename:trader_t *
+trfd	spx_exchange.h	/^    int trfd; \/\/ trader pipe fd$/;"	m	struct:Trader	typeref:typename:int
 uintptr_t	tests/cmocka.h	/^      typedef unsigned int uintptr_t;$/;"	t	typeref:typename:unsigned int
 uintptr_t	tests/cmocka.h	/^      typedef unsigned long int uintptr_t;$/;"	t	typeref:typename:unsigned long int
 uintptr_t	tests/cmocka.h	/^    typedef unsigned int uintptr_t;$/;"	t	typeref:typename:unsigned int
@@ -271,8 +253,6 @@ unit_test	tests/cmocka.h	/^#define unit_test(/;"	d
 unit_test_setup	tests/cmocka.h	/^#define unit_test_setup(/;"	d
 unit_test_setup_teardown	tests/cmocka.h	/^#define unit_test_setup_teardown(/;"	d
 unit_test_teardown	tests/cmocka.h	/^#define unit_test_teardown(/;"	d
-valid	spx_exchange.h	/^    int valid;$/;"	m	struct:trader_node	typeref:typename:int
-wait_all	spx_exchange.c	/^void wait_all()$/;"	f	typeref:typename:void
 will_return	tests/cmocka.h	/^#define will_return(/;"	d
 will_return_always	tests/cmocka.h	/^#define will_return_always(/;"	d
 will_return_count	tests/cmocka.h	/^#define will_return_count(/;"	d

@@ -1,3 +1,4 @@
+#include "spx_common.h"
 #include "spx_trader.h"
 #include <signal.h>
 #include <stdio.h>
@@ -10,12 +11,14 @@ int trader_fd;
 int exchange_fd;
 char buffer[128];
 char message[128];
+int count = 0;
 bool end;
 int order_id = 0;
 FILE *f;
 
 void handle_signal(int sig)
 {
+    count++;
 }
 
 
@@ -24,11 +27,11 @@ int main(int argc, char ** argv) {
         printf("Not enough arguments\n");
         return 1;
     }
-
     // register signal handler
-    f = fopen("input.txt", "r");
-    signal(SIGUSR1, handle_signal);
 
+    f = fopen("input.txt", "r");
+
+    signal(SIGUSR1, handle_signal);
     // connect to named pipes
     int id = atoi(argv[1]);
     char name[32];
@@ -39,10 +42,21 @@ int main(int argc, char ** argv) {
     sprintf(name, FIFO_TRADER, id);
     printf("opening %s\n", name);
     trader_fd = open(name, O_WRONLY);
-    
+
     printf("trader waiting for signal\n");
     // event loop:
-    while (read(exchange_fd, buffer, 128) > 0) {
+
+    while (1) {
+        while (count == 0)
+            pause();
+        assert(read_message(exchange_fd, buffer) > 0);
+        count--;
+        printf("recving %s\n", buffer);
+        if (strstr(buffer, "OPEN"))
+            break;
+    }
+
+    while (1) {
         printf("recving %s\n", buffer);
         if (fgets(message, 128, f) == NULL) {
             end = true;
@@ -53,10 +67,19 @@ int main(int argc, char ** argv) {
             end = true;
             break;
         }
-        write(trader_fd, message, 128);
+        write(trader_fd, message, strlen(message) - 1);
         kill(getppid(), SIGUSR1);
     }
 
+    while (1) {
+        while (count == 0)
+            pause();
+        assert(read_message(exchange_fd, buffer) > 0);
+        count--;
+        printf("recving %s\n", buffer);
+        if (strstr(buffer, "ACCEPTED"))
+            break;
+    }
     printf("trader exit\n");
     // wait for exchange update (MARKET message)
     // send order

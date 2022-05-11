@@ -39,6 +39,7 @@ typedef struct Product {
     char name[16];
 } product_t;
 
+void clean_pipe(int id);
 void clean_all();
 void notify_all(char *message);
 void notify_except(int id, char *message);

@@ -50,6 +50,8 @@ void signal_handler(int sig, siginfo_t *info, void *context)
 
 void pipe_handler(int sig)
 {
+    if (!traders[current].invalid)
+        spx_log(" Trader %d disconnected\n", current);
     traders[current].invalid = true;
     end = true;
     for (int i = 0; i < trader_num; ++i) {
@@ -64,6 +66,8 @@ void child_handler(int sig, siginfo_t* info, void *context)
 {
     for (int i = 0; i < trader_num; ++i) {
         if (traders[i].pid == info->si_pid) {
+            if (!traders[i].invalid)
+                spx_log(" Trader %d disconnected\n", i);
             traders[i].invalid = true;
             break;
         }
@@ -80,7 +84,7 @@ void child_handler(int sig, siginfo_t* info, void *context)
 
 void add_order(int trader_id, order_t order)
 {
-    
+
 }
 
 int order_buy(int trader_id, char *buffer)
@@ -284,7 +288,7 @@ void handle_event(int id)
         return;
     }
 
-    spx_log("[T%d] Parsing command: <%s>\n", id, buffer);
+    spx_log(" [T%d] Parsing command: <%s>\n", id, buffer);
 
     int res = 0;
     if (strstr(buffer, "BUY")) {
@@ -379,7 +383,7 @@ void building_book(const char *filename)
     fgets(buffer, 128, f);
     product_num = atoi(buffer);
     products = calloc(product_num, sizeof(product_t));
-    spx_log("Trading %d products: ", product_num);
+    spx_log(" Trading %d products: ", product_num);
     for (int i = 0; i < product_num; ++i) {
         fgets(buffer, 128, f);
         buffer[strlen(buffer) - 1] = 0; // remove endl
@@ -399,11 +403,11 @@ void creating_pipe(int count)
         char name[32];
         sprintf(name, FIFO_EXCHANGE, i);
         mkfifo(name, 0666);
-        spx_log("Created FIFO %s\n", name);
+        spx_log(" Created FIFO %s\n", name);
 
         sprintf(name, FIFO_TRADER, i);
         mkfifo(name, 0666);
-        spx_log("Created FIFO %s\n", name); 
+        spx_log(" Created FIFO %s\n", name); 
     }
 }
 
@@ -432,12 +436,12 @@ void connect_pipes(int count)
         char name[32];
         sprintf(name, FIFO_EXCHANGE, i);
         int exchagne_fd = open(name, O_WRONLY);
-        spx_log("Connected to %s\n", name);
+        spx_log(" Connected to %s\n", name);
         traders[i].exfd = exchagne_fd;
 
         sprintf(name, FIFO_TRADER, i);
         int trader_fd = open(name, O_RDONLY);
-        spx_log("Connected to %s\n", name);
+        spx_log(" Connected to %s\n", name);
         traders[i].trfd = trader_fd;
     }
 }
@@ -501,18 +505,16 @@ void clean_all()
 {
     // free traders
     for (int i = 0; i < trader_num; ++i) {
-        if (!traders[i].invalid) {
-            kill(traders[i].pid, SIGKILL);
-        }
+        kill(traders[i].pid, SIGKILL);
+        clean_pipe(i);
         // free orders
         free(traders[i].orders);
     }
     free(traders);
-    
-    // free markets
 
-    spx_log("Trading completed\n");
-    spx_log("Exchange fees collected: $%d\n", fees);
+    // free markets
+    spx_log(" Trading completed\n");
+    spx_log(" Exchange fees collected: $%d\n", fees);
 }
 
 
@@ -523,6 +525,4 @@ void clean_pipe(int id)
     unlink(name);
     sprintf(name, FIFO_TRADER, id);
     unlink(name);
-
-    spx_log("Trader %d disconnected\n", id);
 }

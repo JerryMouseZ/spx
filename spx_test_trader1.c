@@ -30,7 +30,7 @@ int main(int argc, char ** argv) {
     }
     // register signal handler
 
-    f = fopen("input.txt", "r");
+    f = fopen("input1.txt", "r");
     
     struct sigaction sa;
     sa.sa_flags = SA_SIGINFO;

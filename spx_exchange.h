@@ -14,11 +14,12 @@
 
 typedef struct Order {
     int trader_id;
-    int id;
+    int order_id;
     bool buy;
     char name[16];
     int qty;
     int price;
+    struct Order *next;
 } order_t;
 
 
@@ -33,20 +34,9 @@ typedef struct Trader {
     int exfd; // exchange fd
     int trfd; // trader pipe fd
     bool invalid; // if true the trader has exit
-    int order_num;
-    int order_reserve;
-    order_t *orders;
     int *prices;
     int *qtys;
 } trader_t;
-
-typedef struct MarketOrder {
-    int trader_id;
-    order_t order;
-    // used for sort
-    int prev;
-    int next;
-} marketorder_t;
 
 
 void add_market_order(int trader_id, order_t order);
@@ -57,5 +47,7 @@ void notify_except(int id, char *message);
 void startup(int argc, char **argv);
 void clean_pipe(int id);
 void update_market(int index);
+void wait_all();
+void match_orders(int trader_id, order_t order, bool add);
 
 #endif

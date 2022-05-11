@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Werror -Wvla -O0 -std=c11 -g -fsanitize=address,leak $(DEFINE)
 LDFLAGS=-lm
-BINARIES=spx_exchange spx_trader spx_test_trader
+BINARIES=spx_exchange spx_trader spx_test_trader1 spx_test_trader2
 
 all: $(BINARIES)
 

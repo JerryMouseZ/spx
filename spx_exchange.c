@@ -120,7 +120,7 @@ int order_buy(int trader_id, char *buffer)
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.id);
     current = trader_id;
-    write(traders[trader_id].exfd, response, sizeof(response));
+    write(traders[trader_id].exfd, response, strlen(response) + 1);
     kill(traders[trader_id].pid, SIGUSR1);
 
     char message[128];
@@ -166,7 +166,7 @@ int order_sell(int trader_id, char *buffer)
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.id);
     current = trader_id;
-    write(traders[trader_id].exfd, response, sizeof(response));
+    write(traders[trader_id].exfd, response, strlen(response) + 1);
     kill(traders[trader_id].pid, SIGUSR1);
 
     char message[128];
@@ -199,7 +199,7 @@ int order_update(int trader_id, char *buffer)
             char response[128];
             sprintf(response, "AMEND %d;", order_id);
             current = trader_id;
-            write(traders[trader_id].exfd, response, sizeof(response));
+            write(traders[trader_id].exfd, response, strlen(response) + 1);
             kill(traders[trader_id].pid, SIGUSR1);
             return order_id;
         }
@@ -222,7 +222,7 @@ int order_remove(int trader_id, char *buffer)
             char response[128];
             sprintf(response, "CANCEL %d;", order_id);
             current = trader_id;
-            write(traders[trader_id].exfd, response, sizeof(response));
+            write(traders[trader_id].exfd, response, strlen(response) + 1);
             kill(traders[trader_id].pid, SIGUSR1);
             return order_id;
         }
@@ -304,7 +304,7 @@ void handle_event(int id)
         char response[128];
         sprintf(response, "INVALID;");
         current = id;
-        write(traders[id].exfd, response, sizeof(response));
+        write(traders[id].exfd, response, strlen(response) + 1);
         kill(traders[id].pid, SIGUSR1);
         return;
     }
@@ -473,7 +473,7 @@ void notify_all(char *message)
 {
     for (int i = 0; i < trader_num; ++i) {
         current = i;
-        write(traders[i].exfd, message, strlen(message));
+        write(traders[i].exfd, message, strlen(message) + 1);
     }
 
     for (int i = 0; i < trader_num; ++i) {
@@ -487,7 +487,7 @@ void notify_except(int id, char *message)
         if (i == id)
             continue;
         current = i;
-        write(traders[i].exfd, message, strlen(message));
+        write(traders[i].exfd, message, strlen(message) + 1);
     }
 
     for (int i = 0; i < trader_num; ++i) {
@@ -504,11 +504,12 @@ void clean_all()
         if (!traders[i].invalid) {
             kill(traders[i].pid, SIGKILL);
         }
+        // free orders
         free(traders[i].orders);
     }
     free(traders);
-
-    // free orders
+    
+    // free markets
 
     spx_log("Trading completed\n");
     spx_log("Exchange fees collected: $%d\n", fees);

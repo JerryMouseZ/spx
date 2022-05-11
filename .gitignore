@@ -1,5 +1,6 @@
 spx_exchange
 spx_trader
+spx_test_trader
 *.tar
 *.zip
 tarder*

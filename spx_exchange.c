@@ -183,7 +183,6 @@ int command_buy(int trader_id, char *buffer)
         return -1;
     new_order.price = atoi(token);
 
-    add_order(new_order);
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.order_id);
     current = trader_id;
@@ -232,7 +231,6 @@ int command_sell(int trader_id, char *buffer)
         return -1;
     new_order.price = atoi(token);
 
-    add_order(new_order);
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.order_id);
     current = trader_id;
@@ -316,6 +314,7 @@ void match_orders(int trader_id, order_t order, bool add)
 
     order_t *node = orders;
     while (node) {
+        order_t *next = node->next;
         if ((strcmp(node->name, order.name) == 0) && node->buy != order.buy) {
             if (order.buy && order.price >= node->price) {
                 int num = min(order.qty, node->qty);
@@ -325,9 +324,6 @@ void match_orders(int trader_id, order_t order, bool add)
                 traders[order.trader_id].qtys[pro] += num;
 
                 node->qty -= num;
-                if (node->qty == 0) {
-                    remove_order(node->trader_id, node->order_id);
-                }
 
                 traders[node->trader_id].prices[pro] += order.price * num;
                 traders[node->trader_id].qtys[pro] -= num;
@@ -341,6 +337,10 @@ void match_orders(int trader_id, order_t order, bool add)
                 write(traders[node->trader_id].exfd, message, strlen(message));
                 sprintf(message, "FILL %d %d;", order.order_id, num);
                 write(traders[order.trader_id].exfd, message, strlen(message));
+
+                if (node->qty == 0) {
+                    remove_order(node->trader_id, node->order_id);
+                }
                 if (order.qty == 0)
                     return;
             } else if (!order.buy && order.price <= node->price) {
@@ -351,10 +351,6 @@ void match_orders(int trader_id, order_t order, bool add)
                 traders[order.trader_id].qtys[pro] -= num;
 
                 node->qty -= num;
-                if (node->qty == 0) {
-                    remove_order(node->trader_id, node->order_id);
-                }
-
                 traders[node->trader_id].prices[pro] -= value;
                 traders[node->trader_id].qtys[pro] += num;
                 int fee = (value + 50) / 100;
@@ -368,12 +364,16 @@ void match_orders(int trader_id, order_t order, bool add)
 
                 sprintf(message, "FILL %d %d;", order.order_id, num);
                 write(traders[order.trader_id].exfd, message, strlen(message));
+
+                if (node->qty == 0) {
+                    remove_order(node->trader_id, node->order_id);
+                }
+
                 if (order.qty == 0)
                     return;
-
             }
-        }         
-        node = node->next;
+        }
+        node = next;
     }
 
     if (order.qty > 0 && add) {
@@ -417,12 +417,12 @@ void report()
         while (node) {
             order_t *next = node->next;
             if (strcmp(node->name, products[i].name) == 0) {
+                counts++;
+                qtys += node->qty;
                 if (next) {
                     if ((strcmp(next->name, products[i].name) == 0)
                         && (node->buy == next->buy)
                         && (node->price == next->price)) {
-                        counts++;
-                        qtys += node->qty;
                         node = node->next;
                         continue;
                     }

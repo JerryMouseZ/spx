@@ -47,7 +47,6 @@ int main(int argc, char ** argv) {
     trader_fd = open(name, O_WRONLY);
 
     // event loop:
-
     while (1) {
         while (count == 0)
             pause();
@@ -58,6 +57,20 @@ int main(int argc, char ** argv) {
             break;
     }
     
+    int buys = 3;
+    while (1) {
+        while (count == 0)
+            pause();
+        assert(read_message(exchange_fd, buffer) > 0);
+        count--;
+        printf("recving %s\n", buffer);
+        if (strstr(buffer, "BUY")) {
+            buys--;
+            if (buys == 0)
+                break;
+        }
+    }
+
     int orders = 0;
     while (1) {
         if (fgets(message, 128, f) == NULL) {

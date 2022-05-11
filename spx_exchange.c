@@ -135,7 +135,7 @@ int order_buy(int trader_id, char *buffer)
     
     char message[128];
     sprintf(message, "MARKET BUY %s %d %d;", new_order.name, new_order.qty, new_order.price);
-    notify_except(trader_id, buffer);
+    notify_except(trader_id, message);
     add_order(trader_id, new_order);
     return new_order.id;
 }
@@ -183,7 +183,7 @@ int order_sell(int trader_id, char *buffer)
 
     char message[128];
     sprintf(message, "MARKET SELL %s %d %d;", new_order.name, new_order.qty, new_order.price);
-    notify_except(trader_id, buffer);
+    notify_except(trader_id, message);
     add_order(trader_id, new_order);
     return new_order.id;
 }
@@ -205,19 +205,36 @@ int order_update(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     int price = atoi(token);
+    order_t order;
+    int res = -1;
     for (int i = 0; i < traders[trader_id].order_num; ++i) {
         if (traders[trader_id].orders[i].id == order_id) {
+            // remove on market
+            for (int j = 0; j < market_num; ++j) {
+                if (markets[j].trader_id == trader_id && markets[j].order.id == order_id) {
+                    markets[j].order.qty = 0;
+                    update_market(j);
+                    break;
+                }
+            }
+            order = traders[trader_id].orders[i];
             traders[trader_id].orders[i].price = price;
             traders[trader_id].orders[i].qty = qty;
+            add_market_order(trader_id, traders[trader_id].orders[i]);
             char response[128];
             sprintf(response, "AMEND %d;", order_id);
             current = trader_id;
             write(traders[trader_id].exfd, response, strlen(response));
             kill(traders[trader_id].pid, SIGUSR1);
-            return order_id;
+            res = order_id;
+            break;
         }
     }
-    return -1;
+
+    char message[128];
+    sprintf(message, "MARKET AMEND %s %d %d;", order.name, order.qty, order.price);
+    notify_except(trader_id, message);
+    return res;
 }
 
 int order_remove(int trader_id, char *buffer)
@@ -229,18 +246,26 @@ int order_remove(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     int order_id = atoi(token);
+    int res = -1;
+    order_t order;
     for (int i = 0; i < traders[trader_id].order_num; ++i) {
         if (traders[trader_id].orders[i].id == order_id) {
+            order = traders[trader_id].orders[i];
             traders[trader_id].orders[i].qty = 0;
             char response[128];
             sprintf(response, "CANCEL %d;", order_id);
             current = trader_id;
             write(traders[trader_id].exfd, response, strlen(response));
             kill(traders[trader_id].pid, SIGUSR1);
-            return order_id;
+            res = order_id;
+            break;
         }
     }
-    return -1;
+    char message[128];
+    sprintf(message, "MARKET CANCEL %s 0 0;", order.name);
+    notify_except(trader_id, message);
+
+    return res;
 }
 
 void update_market(int index)
@@ -258,6 +283,8 @@ void update_market(int index)
         if (next >= 0) {
             markets[next].prev = prev;
         }
+        markets[index].next = -1;
+        markets[index].prev = -1;
     }
 }
 
@@ -297,7 +324,7 @@ void add_market_order(int trader_id, order_t order)
             continue;
         }
         int prev = markets[index].prev;
-        if (markets[index].order.price <= order.price) {
+        if (markets[index].order.price < order.price) {
             markets[market_num].next = index;
             markets[market_num].prev = prev;
             markets[index].prev = market_num;
@@ -324,18 +351,21 @@ void add_market_order(int trader_id, order_t order)
 
 void match_orders(int trader_id, order_t order)
 {
+    char message[128];
     if (order.qty == 0)
         return;
     int pro = get_product_index(order.name);
     assert(pro >= 0);
     // money and fees
-    for (int i = 0; i < market_num; ++i) {
+
+    for (int i = market_max; i != -1; i = markets[i].next) {
         if (markets[i].order.qty == 0)
             continue;
         if (strcmp(markets[i].order.name, order.name) == 0 && markets[i].order.buy != order.buy) {
             if (order.buy && order.price >= markets[i].order.price) {
                 int num = min(order.qty, markets[i].order.qty);
                 order.qty -= num;
+                int value = order.price * num;
                 traders[order.trader_id].prices[pro] -= order.price * num;
                 traders[order.trader_id].qtys[pro] += num;
 
@@ -347,22 +377,31 @@ void match_orders(int trader_id, order_t order)
                 traders[order.trader_id].prices[pro] -= fee;
 
                 update_market(i);
+                spx_log(" Match: Order %d [T%d], New Order %d [T%d], value: $%d, fee: $%d.\n", 
+                        markets[i].order.id, markets[i].trader_id, order.id, trader_id, value, fee);
+                sprintf(message, "FILL %d %d;", markets[i].order.id, num);
+                write(traders[markets[i].trader_id].exfd, message, strlen(message));
                 if (order.qty == 0)
                     return;
             } else if(!order.buy && order.price <= markets[i].order.price) {
                 int num = min(order.qty, markets[i].order.qty);
+                int value = markets[i].order.price * num;
                 order.qty -= num;
-                traders[order.trader_id].prices[pro] += order.price * num;
+                traders[order.trader_id].prices[pro] += value;
                 traders[order.trader_id].qtys[pro] -= num;
 
                 markets[i].order.qty -= num;
-                traders[markets[i].order.trader_id].prices[pro] -= order.price * num;
+                traders[markets[i].order.trader_id].prices[pro] -= value;
                 traders[markets[i].order.trader_id].qtys[pro] += num;
-                int fee = (order.price * num + 50) / 100;
+                int fee = (value + 50) / 100;
                 fees += fee;
                 traders[order.trader_id].prices[pro] -= fee;
 
                 update_market(i);
+                spx_log(" Match: Order %d [T%d], New Order %d [T%d], value: $%d, fee: $%d.\n", 
+                        markets[i].order.id, markets[i].trader_id, order.id, trader_id, value, fee);
+                sprintf(message, "FILL %d %d;", markets[i].order.id, num);
+                write(traders[markets[i].trader_id].exfd, message, strlen(message));
                 if (order.qty == 0)
                     return;
             }
@@ -378,20 +417,32 @@ void report()
     for (int i = 0; i < product_num; ++i) {
         printf(LOG_PREFIX "\tProduct: %s; ", products[i].name);
         int buy_levels = 0, sell_levels = 0;
-        for (int j = 0; j < market_num; ++j) {
-            if (markets[j].order.qty == 0)
-                continue;
-            if (strcmp(markets[j].order.name, products[i].name) == 0) {
-                if (markets[j].order.buy)
-                    buy_levels++;
-                else
-                    sell_levels++;
+        int index = market_max;
+        while (index != -1) {
+            int next = markets[index].next;
+            if (markets[index].order.qty != 0) {
+                if (strcmp(markets[index].order.name, products[i].name) == 0) {
+                    if (next >= 0 && markets[next].order.qty > 0) {
+                        if ((strcmp(markets[next].order.name, products[i].name) == 0)
+                            && (markets[index].order.buy == markets[next].order.buy)
+                            && (markets[index].order.price == markets[next].order.price)) {
+                            index = next;
+                            continue;
+                        }
+                    }
+                    if (markets[index].order.buy)
+                        buy_levels++;
+                    else
+                        sell_levels++;
+                }
             }
+            index = next;
         }
+
         printf("Buy levels: %d; Sell levels: %d\n", buy_levels, sell_levels);
 
         // print order book
-        int index = market_max;
+        index = market_max;
         int orders = 0;
         int qtys = 0;
 

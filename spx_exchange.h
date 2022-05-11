@@ -49,11 +49,13 @@ typedef struct MarketOrder {
 } marketorder_t;
 
 
+void add_market_order(int trader_id, order_t order);
 void clean_pipe(int id);
 void clean_all();
 void notify_all(char *message);
 void notify_except(int id, char *message);
 void startup(int argc, char **argv);
 void clean_pipe(int id);
+void update_market(int index);
 
 #endif

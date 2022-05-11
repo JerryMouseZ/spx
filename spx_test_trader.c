@@ -19,6 +19,7 @@ FILE *f;
 void handle_signal(int sig)
 {
     count++;
+    return;
 }
 
 
@@ -30,8 +31,12 @@ int main(int argc, char ** argv) {
     // register signal handler
 
     f = fopen("input.txt", "r");
+    
+    struct sigaction sa;
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_handler = handle_signal;
+    sigaction(SIGUSR1, &sa, NULL);
 
-    signal(SIGUSR1, handle_signal);
     // connect to named pipes
     int id = atoi(argv[1]);
     char name[32];
@@ -55,9 +60,9 @@ int main(int argc, char ** argv) {
         if (strstr(buffer, "OPEN"))
             break;
     }
-
+    
+    int orders = 0;
     while (1) {
-        printf("recving %s\n", buffer);
         if (fgets(message, 128, f) == NULL) {
             end = true;
             break;
@@ -67,19 +72,18 @@ int main(int argc, char ** argv) {
             end = true;
             break;
         }
+
+        orders++;
         write(trader_fd, message, strlen(message) - 1);
         kill(getppid(), SIGUSR1);
-    }
 
-    while (1) {
         while (count == 0)
             pause();
-        assert(read_message(exchange_fd, buffer) > 0);
+        read_message(exchange_fd, buffer);
         count--;
         printf("recving %s\n", buffer);
-        if (strstr(buffer, "ACCEPTED"))
-            break;
     }
+
     printf("trader exit\n");
     // wait for exchange update (MARKET message)
     // send order

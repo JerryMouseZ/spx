@@ -26,9 +26,10 @@ static inline int min(int a, int b)
 trader_t *traders = NULL; // arraries for traders
 product_t *products = NULL;
 marketorder_t *markets = NULL;
-int current;
 int market_num = 0;
 int market_reserve = 10;
+
+int current = 0;
 
 int trader_num = 0;
 int product_num = 0;
@@ -44,13 +45,7 @@ void signal_handler(int sig, siginfo_t *info, void *context)
 {
     sigfifos[tail] = info->si_pid;
     tail = (tail + 1) % 10;
-    // waitint for handling
     return;
-
-    /* // look up events[n].data.fd and send */
-    /* pid_t pid = info->si_pid; */
-    /* current = trader_lookup_pid(pid); */
-    /* assert(current != NULL); */
 }
 
 void pipe_handler(int sig)
@@ -345,14 +340,14 @@ void main_loop()
 
 int main(int argc, char **argv) {
     // install signal handler
-    struct sigaction sa;
+    struct sigaction sa, sb;
     sa.sa_flags = SA_SIGINFO;
     sa.sa_sigaction = signal_handler;
     sigaction(SIGUSR1, &sa, NULL);
 
-    sa.sa_sigaction = child_handler;
-    sigaction(SIGCHLD, &sa, NULL);
-
+    sb.sa_flags = SA_SIGINFO;
+    sb.sa_sigaction = child_handler;
+    sigaction(SIGCHLD, &sb, NULL);
     signal(SIGPIPE, pipe_handler);
 
     startup(argc, argv);

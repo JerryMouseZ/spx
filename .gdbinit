@@ -1,6 +1,6 @@
 file spx_exchange
 # set detach-on-fork off
-set follow-fork-mode child
+# set follow-fork-mode child
 set args products.txt ./spx_test_trader
 b main
 # b pipe_handler

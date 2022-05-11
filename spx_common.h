@@ -19,10 +19,14 @@
 static inline int read_message(int fd, char *buffer)
 {
     int i = 0;
-    int nbytes;
+    int nbytes = 0;
     while((nbytes = read(fd, buffer + i, 1)) > 0) {
-        if (buffer[i] == ';')
+        if (buffer[i] == -1)
+            return -1;
+        if (buffer[i] == ';') {
+            buffer[i + 1] = 0;
             return i + 1;
+        }
         i++;
     }
     return -1;

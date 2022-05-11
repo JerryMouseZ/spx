@@ -41,14 +41,11 @@ int main(int argc, char ** argv) {
     int id = atoi(argv[1]);
     char name[32];
     sprintf(name, FIFO_EXCHANGE, id);
-    printf("opening %s\n", name);
     exchange_fd = open(name, O_RDONLY);
 
     sprintf(name, FIFO_TRADER, id);
-    printf("opening %s\n", name);
     trader_fd = open(name, O_WRONLY);
 
-    printf("trader waiting for signal\n");
     // event loop:
 
     while (1) {
@@ -84,7 +81,6 @@ int main(int argc, char ** argv) {
         printf("recving %s\n", buffer);
     }
 
-    printf("trader exit\n");
     // wait for exchange update (MARKET message)
     // send order
     // wait for exchange confirmation (ACCEPTED message)

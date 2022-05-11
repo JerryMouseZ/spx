@@ -13,12 +13,20 @@
     } while (0)
 
 typedef struct Order {
+    int trader_id;
     int id;
     bool buy;
     char name[16];
     int qty;
     int price;
 } order_t;
+
+
+typedef struct Product {
+    char name[16];
+    int price;
+} product_t;
+
 
 typedef struct Trader {
     int pid;
@@ -28,16 +36,18 @@ typedef struct Trader {
     int order_num;
     int order_reserve;
     order_t *orders;
+    int *prices;
+    int *qtys;
 } trader_t;
 
 typedef struct MarketOrder {
     int trader_id;
     order_t order;
+    // used for sort
+    int prev;
+    int next;
 } marketorder_t;
 
-typedef struct Product {
-    char name[16];
-} product_t;
 
 void clean_pipe(int id);
 void clean_all();

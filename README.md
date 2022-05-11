@@ -15,3 +15,5 @@ for trader in traders do
     Send sigusr1 to trader
 
 signal handler shouldn't be long
+
+if recepted not recv, resend the buy command

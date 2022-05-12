@@ -296,6 +296,10 @@ int command_amended(int trader_id, char *buffer)
     remove_order(trader_id, order_id);
 
     char message[128];
+    sprintf(message, "AMENDED %d;", order_id);
+    write(traders[trader_id].exfd, message, strlen(message));
+    kill(traders[trader_id].pid, SIGUSR1);
+
     if (neworder.buy)
         sprintf(message, "MARKET BUY %s %d %d;", neworder.name, neworder.qty, neworder.price);
     else

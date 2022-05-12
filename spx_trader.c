@@ -1,3 +1,4 @@
+#include "spx_common.h"
 #include "spx_trader.h"
 #include <signal.h>
 #include <stdio.h>
@@ -9,27 +10,16 @@ int sigwait(const sigset_t *restrict set, int *restrict sig);
 int trader_fd;
 int exchange_fd;
 char buffer[128];
+char message[128];
+int count = 0;
 bool end;
 int order_id = 0;
+FILE *f;
 
 void handle_signal(int sig)
 {
-    while (read(exchange_fd, buffer, 128) > 0) {
-        if (strstr(buffer, "SELL")) {
-            int qty = atoi(strstr(buffer + strlen("MARKET SELL "), " ") + 1);
-            if (qty >= 1000){
-                end = true;
-                break;
-            }
-
-            char message[128];
-            sprintf(message, "BUY %d %s", order_id, buffer + strlen("MARKET SELL "));
-            order_id++;
-
-            write(trader_fd, message, 128);
-            kill(getppid(), SIGUSR1);
-        }
-    }
+    count++;
+    return;
 }
 
 
@@ -38,6 +28,14 @@ int main(int argc, char ** argv) {
         printf("Not enough arguments\n");
         return 1;
     }
+    // register signal handler
+
+    f = fopen("input1.txt", "r");
+    
+    struct sigaction sa;
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_handler = handle_signal;
+    sigaction(SIGUSR1, &sa, NULL);
 
     // connect to named pipes
     int id = atoi(argv[1]);
@@ -48,21 +46,44 @@ int main(int argc, char ** argv) {
     sprintf(name, FIFO_TRADER, id);
     trader_fd = open(name, O_WRONLY);
 
-    // register signal handler
-    sigset_t mask, oldmask;
-    signal(SIGUSR1, handle_signal);
-    sigemptyset (&mask);
-    sigaddset (&mask, SIGUSR1);
-
     // event loop:
-    sigprocmask (SIG_BLOCK, &mask, &oldmask);
-    while (!end)
-        sigsuspend (&oldmask);
-    sigprocmask (SIG_UNBLOCK, &mask, NULL);
+
+    while (1) {
+        while (count == 0)
+            pause();
+        assert(read_message(exchange_fd, buffer) > 0);
+        count--;
+        printf("recving %s\n", buffer);
+        if (strstr(buffer, "OPEN"))
+            break;
+    }
+    
+    int orders = 0;
+    while (1) {
+        if (fgets(message, 128, f) == NULL) {
+            end = true;
+            break;
+        }
+
+        if (strstr(message, "quit")) {
+            end = true;
+            break;
+        }
+
+        orders++;
+        write(trader_fd, message, strlen(message) - 1);
+        kill(getppid(), SIGUSR1);
+
+        while (count == 0)
+            pause();
+        read_message(exchange_fd, buffer);
+        count--;
+        printf("recving %s\n", buffer);
+    }
+
     // wait for exchange update (MARKET message)
     // send order
     // wait for exchange confirmation (ACCEPTED message)
-    //
 
     close(exchange_fd);
     close(trader_fd);

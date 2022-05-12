@@ -346,15 +346,14 @@ void match_orders(int trader_id, order_t order, bool add)
             if (order.buy && order.price >= node->price) {
                 int num = min(order.qty, node->qty);
                 order.qty -= num;
-                int value = order.price * num;
-                traders[order.trader_id].prices[pro] -= order.price * num;
+                int value = node->price * num;
+                traders[order.trader_id].prices[pro] -= value;
                 traders[order.trader_id].qtys[pro] += num;
 
                 node->qty -= num;
-
-                traders[node->trader_id].prices[pro] += order.price * num;
+                traders[node->trader_id].prices[pro] += value;
                 traders[node->trader_id].qtys[pro] -= num;
-                int fee = (order.price * num + 50) / 100;
+                int fee = (value + 50) / 100;
                 fees += fee;
                 traders[order.trader_id].prices[pro] -= fee;
 

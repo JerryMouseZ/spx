@@ -294,7 +294,7 @@ int command_amended(int trader_id, char *buffer)
     return res;
 }
 
-int command_cancelled(int trader_id, char *buffer)
+int command_cancel(int trader_id, char *buffer)
 {
     char *token = strtok(buffer, " ");
     if (token == NULL)
@@ -309,10 +309,15 @@ int command_cancelled(int trader_id, char *buffer)
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
         return -1;
-    remove_order(trader_id, order_id);
+    
     char message[128];
-    sprintf(message, "MARKET CANCEL %s 0 0;", order.name);
+    sprintf(message, "CANCELLED %d;", order_id);
+    write(traders[trader_id].exfd, message, strlen(message));
+    kill(traders[trader_id].pid, SIGUSR1);
+
+    sprintf(message, "MARKET %s %s 0 0;", oldorder->buy ? "BUY" : "SELL", order.name);
     notify_except(trader_id, message);
+    remove_order(trader_id, order_id);
     return res;
 }
 
@@ -506,7 +511,7 @@ void handle_event(int id)
     } else if (strstr(buffer, "AMEND")) {
         res = command_amended(id, buffer);
     } else if (strstr(buffer, "CANCEL")) {
-        res = command_cancelled(id, buffer);
+        res = command_cancel(id, buffer);
     } else {
         // invalid
         res = -1;

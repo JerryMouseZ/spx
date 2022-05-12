@@ -281,7 +281,6 @@ int command_amended(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     int price = atoi(token);
-    order_t order;
     
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
@@ -291,10 +290,11 @@ int command_amended(int trader_id, char *buffer)
     order_t neworder = *oldorder;
     remove_order(trader_id, order_id);
     add_order(neworder);
+
     char message[128];
-    sprintf(message, "MARKET AMEND %s %d %d;", order.name, order.qty, order.price);
+    sprintf(message, "MARKET AMEND %s %d %d;", neworder.name, neworder.qty, neworder.price);
     notify_except(trader_id, message);
-    match_orders(trader_id, *oldorder, false);
+    match_orders(trader_id, neworder, false);
     return order_id;
 }
 

@@ -1,5 +1,3 @@
-BUY 0 GPU 30 500;
-BUY 1 GPU 30 501;
-BUY 2 GPU 30 501;
-BUY 3 GPU 30 502;
+BUY 0 Cheeseburger -3 500;
+SELL 0 Pizza 0 5;
 quit

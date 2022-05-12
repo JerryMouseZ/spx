@@ -36,6 +36,7 @@ typedef struct Trader {
     bool invalid; // if true the trader has exit
     int *prices;
     int *qtys;
+    int next_id;
 } trader_t;
 
 

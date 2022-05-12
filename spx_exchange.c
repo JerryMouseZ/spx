@@ -161,6 +161,9 @@ int command_buy(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     new_order.order_id = atoi(token);
+    if (new_order.order_id != traders[trader_id].next_id) {
+        return -1;
+    }
     token = strtok(NULL, " ");
     if (token == NULL)
         return -1;
@@ -178,11 +181,16 @@ int command_buy(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     new_order.qty = atoi(token);
+    if (new_order.qty <= 0 || new_order.qty >= 1000000)
+        return -1;
     token = strtok(NULL, " ");
     if (token == NULL)
         return -1;
     new_order.price = atoi(token);
-
+    if (new_order.price <= 0 || new_order.price >= 1000000)
+        return -1;
+    
+    traders[trader_id].next_id++;
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.order_id);
     current = trader_id;
@@ -209,6 +217,9 @@ int command_sell(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     new_order.order_id = atoi(token);
+    if (new_order.order_id != traders[trader_id].next_id) {
+        return -1;
+    }
     token = strtok(NULL, " ");
     if (token == NULL)
         return -1;
@@ -226,11 +237,18 @@ int command_sell(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     new_order.qty = atoi(token);
+    if (new_order.qty <= 0 || new_order.qty >= 1000000)
+        return -1;
+
     token = strtok(NULL, " ");
     if (token == NULL)
         return -1;
     new_order.price = atoi(token);
+    if (new_order.price <= 0 || new_order.price >= 1000000)
+        return -1;
 
+
+    traders[trader_id].next_id++;
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.order_id);
     current = trader_id;
@@ -265,7 +283,8 @@ int command_amended(int trader_id, char *buffer)
     int res = -1;
     
     order_t *oldorder = order_find(trader_id, order_id);
-    assert(oldorder);
+    if (oldorder == NULL)
+        return -1;
     oldorder->qty = qty;
     oldorder->price = price;
     char message[128];
@@ -287,6 +306,9 @@ int command_cancelled(int trader_id, char *buffer)
     int res = -1;
     order_t order;
     
+    order_t *oldorder = order_find(trader_id, order_id);
+    if (oldorder == NULL)
+        return -1;
     remove_order(trader_id, order_id);
     char message[128];
     sprintf(message, "MARKET CANCEL %s 0 0;", order.name);

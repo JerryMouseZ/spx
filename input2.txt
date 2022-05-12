@@ -1,3 +1,5 @@
-SELL 0 GPU 99 511;
-SELL 1 GPU 99 402;
+BUY 0 Pizza 30 99999999;
+SELL 0 Pizza 10 0;
+BUY 0 Pizza;
+SELL;
 quit

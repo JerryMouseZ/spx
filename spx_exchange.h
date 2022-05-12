@@ -25,7 +25,6 @@ typedef struct Order {
 
 typedef struct Product {
     char name[16];
-    int price;
 } product_t;
 
 
@@ -34,8 +33,8 @@ typedef struct Trader {
     int exfd; // exchange fd
     int trfd; // trader pipe fd
     bool invalid; // if true the trader has exit
-    int *prices;
-    int *qtys;
+    long *prices;
+    long *qtys;
     int next_id;
 } trader_t;
 

@@ -1,4 +1,3 @@
-BUY 0 Basil 4 100;
-CANCEL 0;
-BUY 1 Basil 1 200;
+SELL 0 Headphones 789321 673182;
+BUY 1 Headphones 987123 878331;
 quit

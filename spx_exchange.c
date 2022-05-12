@@ -37,7 +37,7 @@ int sigfifos[10];
 int head;
 int tail;
 
-int fees = 0;
+long fees = 0;
 // exit flag
 bool end;
 
@@ -364,18 +364,18 @@ void match_orders(int trader_id, order_t order, bool add)
             if (order.buy && order.price >= node->price) {
                 int num = min(order.qty, node->qty);
                 order.qty -= num;
-                int value = node->price * num;
+                long value = node->price * (long)num;
                 traders[order.trader_id].prices[pro] -= value;
                 traders[order.trader_id].qtys[pro] += num;
 
                 node->qty -= num;
                 traders[node->trader_id].prices[pro] += value;
                 traders[node->trader_id].qtys[pro] -= num;
-                int fee = (value + 50) / 100;
+                long fee = (value + 50) / 100;
                 fees += fee;
                 traders[order.trader_id].prices[pro] -= fee;
 
-                spx_log(" Match: Order %d [T%d], New Order %d [T%d], value: $%d, fee: $%d.\n", 
+                spx_log(" Match: Order %d [T%d], New Order %d [T%d], value: $%ld, fee: $%ld.\n", 
                         node->order_id, node->trader_id, order.order_id, trader_id, value, fee);
                 sprintf(message, "FILL %d %d;", node->order_id, num);
                 write(traders[node->trader_id].exfd, message, strlen(message));
@@ -389,7 +389,7 @@ void match_orders(int trader_id, order_t order, bool add)
                     return;
             } else if (!order.buy && order.price <= node->price) {
                 int num = min(order.qty, node->qty);
-                int value = node->price * num;
+                long value = node->price * (long)num;
                 order.qty -= num;
                 traders[order.trader_id].prices[pro] += value;
                 traders[order.trader_id].qtys[pro] -= num;
@@ -397,11 +397,11 @@ void match_orders(int trader_id, order_t order, bool add)
                 node->qty -= num;
                 traders[node->trader_id].prices[pro] -= value;
                 traders[node->trader_id].qtys[pro] += num;
-                int fee = (value + 50) / 100;
+                long fee = (value + 50) / 100;
                 fees += fee;
                 traders[order.trader_id].prices[pro] -= fee;
 
-                spx_log(" Match: Order %d [T%d], New Order %d [T%d], value: $%d, fee: $%d.\n", 
+                spx_log(" Match: Order %d [T%d], New Order %d [T%d], value: $%ld, fee: $%ld.\n", 
                         node->order_id, node->trader_id, order.order_id, trader_id, value, fee);
                 sprintf(message, "FILL %d %d;", node->order_id, num);
                 write(traders[node->trader_id].exfd, message, strlen(message));
@@ -497,9 +497,9 @@ void report()
         spx_log("\tTrader %d: ", i);
         for (int j = 0; j < product_num; ++j) {
             if (j != product_num - 1)
-                printf("%s %d ($%d), ", products[j].name, traders[i].qtys[j], traders[i].prices[j]);
+                printf("%s %ld ($%ld), ", products[j].name, traders[i].qtys[j], traders[i].prices[j]);
             else
-                printf("%s %d ($%d)\n", products[j].name, traders[i].qtys[j], traders[i].prices[j]);
+                printf("%s %ld ($%ld)\n", products[j].name, traders[i].qtys[j], traders[i].prices[j]);
         }
     }
 }
@@ -682,8 +682,8 @@ void init_traders(int num)
     trader_num = num;
     traders = calloc(trader_num, sizeof(trader_t));
     for (int i = 0; i < trader_num; ++i) {
-        traders[i].prices = calloc(product_num, sizeof(int));
-        traders[i].qtys = calloc(product_num, sizeof(int));
+        traders[i].prices = calloc(product_num, sizeof(long));
+        traders[i].qtys = calloc(product_num, sizeof(long));
     }
 }
 
@@ -761,7 +761,7 @@ void clean_all()
     }
 
     spx_log(" Trading completed\n");
-    spx_log(" Exchange fees collected: $%d\n", fees);
+    spx_log(" Exchange fees collected: $%ld\n", fees);
 }
 
 

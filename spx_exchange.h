@@ -50,5 +50,6 @@ void clean_pipe(int id);
 void update_market(int index);
 void wait_all();
 void match_orders(int trader_id, order_t order, bool add);
+void report();
 
 #endif

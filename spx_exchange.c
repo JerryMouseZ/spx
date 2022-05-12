@@ -201,6 +201,7 @@ int command_buy(int trader_id, char *buffer)
     sprintf(message, "MARKET BUY %s %d %d;", new_order.name, new_order.qty, new_order.price);
     notify_except(trader_id, message);
     match_orders(trader_id, new_order, true);
+    report();
     return new_order.order_id;
 }
 
@@ -259,6 +260,7 @@ int command_sell(int trader_id, char *buffer)
     sprintf(message, "MARKET SELL %s %d %d;", new_order.name, new_order.qty, new_order.price);
     notify_except(trader_id, message);
     match_orders(trader_id, new_order, true);
+    report();
     return new_order.order_id;
 }
 
@@ -280,18 +282,20 @@ int command_amended(int trader_id, char *buffer)
         return -1;
     int price = atoi(token);
     order_t order;
-    int res = -1;
     
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
         return -1;
     oldorder->qty = qty;
     oldorder->price = price;
+    order_t neworder = *oldorder;
+    remove_order(trader_id, order_id);
+    add_order(neworder);
     char message[128];
     sprintf(message, "MARKET AMEND %s %d %d;", order.name, order.qty, order.price);
     notify_except(trader_id, message);
     match_orders(trader_id, *oldorder, false);
-    return res;
+    return order_id;
 }
 
 int command_cancel(int trader_id, char *buffer)
@@ -303,7 +307,6 @@ int command_cancel(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     int order_id = atoi(token);
-    int res = -1;
     order_t order;
     
     order_t *oldorder = order_find(trader_id, order_id);
@@ -318,7 +321,7 @@ int command_cancel(int trader_id, char *buffer)
     sprintf(message, "MARKET %s %s 0 0;", oldorder->buy ? "BUY" : "SELL", order.name);
     notify_except(trader_id, message);
     remove_order(trader_id, order_id);
-    return res;
+    return order_id;
 }
 
 int get_product_index(char *name)
@@ -528,7 +531,6 @@ void handle_event(int id)
     // maybe remove and cannot find the order
     // try to match orders
     // match order_list
-    report();
 }
 
 void main_loop()

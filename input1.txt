@@ -1,5 +1,4 @@
 BUY 0 Basil 4 100;
 CANCEL 0;
-SELL 1 Basil 3 100;
-BUY 2 Basil 1 200;
+BUY 1 Basil 1 200;
 quit

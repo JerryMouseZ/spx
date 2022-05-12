@@ -53,7 +53,7 @@ int main(int argc, char ** argv) {
         assert(read_message(exchange_fd, buffer) > 0);
         count--;
         printf("recving %s\n", buffer);
-        if (strstr(buffer, "OPEN"))
+        if (strstr(buffer, "0 0"))
             break;
     }
     

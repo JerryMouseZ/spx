@@ -289,17 +289,22 @@ int command_amended(int trader_id, char *buffer)
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
         return -1;
+
     oldorder->qty = qty;
     oldorder->price = price;
     order_t neworder = *oldorder;
     remove_order(trader_id, order_id);
-    add_order(neworder);
 
     char message[128];
-    sprintf(message, "MARKET %s %s 0 0;", oldorder->buy ? "BUY" : "SELL", neworder.name);
+    if (neworder.buy)
+        sprintf(message, "MARKET BUY %s %d %d;", neworder.name, neworder.qty, neworder.price);
+    else
+        sprintf(message, "MARKET SELL %s %d %d;", neworder.name, neworder.qty, neworder.price);
     /* sprintf(message, "MARKET AMEND %s %d %d;", neworder.name, neworder.qty, neworder.price); */
     notify_except(trader_id, message);
-    match_orders(trader_id, neworder, false);
+
+    match_orders(trader_id, neworder, true);
+    report();
     return order_id;
 }
 
@@ -312,20 +317,25 @@ int command_cancel(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     int order_id = atoi(token);
-    order_t order;
     
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
         return -1;
     
+    order_t new_order = *oldorder;
+    remove_order(trader_id, order_id);
+
     char message[128];
     sprintf(message, "CANCELLED %d;", order_id);
     write(traders[trader_id].exfd, message, strlen(message));
     kill(traders[trader_id].pid, SIGUSR1);
-
-    sprintf(message, "MARKET %s %s 0 0;", oldorder->buy ? "BUY" : "SELL", order.name);
+    
+    if (new_order.buy)
+        sprintf(message, "MARKET BUY %s 0 0;", new_order.name);
+    else
+        sprintf(message, "MARKET SELL %s 0 0;", new_order.name);
     notify_except(trader_id, message);
-    remove_order(trader_id, order_id);
+    report();
     return order_id;
 }
 

@@ -1,5 +1,2 @@
-BUY 0 Pizza 30 99999999;
-SELL 0 Pizza 10 0;
-BUY 0 Pizza;
-SELL;
+SELL 0 Basil 3 100;
 quit

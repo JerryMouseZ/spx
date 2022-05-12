@@ -1,3 +1,7 @@
 BUY 0 Cheeseburger -3 500;
 SELL 0 Pizza 0 5;
+BUY 0 Pizza 30 99999999;
+SELL 0 Pizza 10 0;
+BUY 0 Pizza;
+SELL;
 quit

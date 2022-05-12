@@ -51,8 +51,13 @@ void signal_handler(int sig, siginfo_t *info, void *context)
 
 void pipe_handler(int sig, siginfo_t *info, void *context)
 {
-    if (!traders[current].invalid)
+    if (!traders[current].invalid) {
         spx_log(" Trader %d disconnected\n", current);
+        kill(traders[current].pid, SIGKILL);
+        close(traders[current].exfd);
+        close(traders[current].trfd);
+    }
+
     traders[current].invalid = true;
     end = true;
     for (int i = 0; i < trader_num; ++i) {
@@ -67,8 +72,11 @@ void child_handler(int sig, siginfo_t* info, void *context)
 {
     for (int i = 0; i < trader_num; ++i) {
         if (traders[i].pid == info->si_pid) {
-            if (!traders[i].invalid)
+            if (!traders[i].invalid) {
                 spx_log(" Trader %d disconnected\n", i);
+                close(traders[current].exfd);
+                close(traders[current].trfd);
+            }
             traders[i].invalid = true;
             break;
         }
@@ -105,7 +113,7 @@ void add_order(order_t order)
         orders = new_order;
         return;
     }
-    
+
     if (new_order->price > orders->price) {
         new_order->next = orders;
         orders = new_order;
@@ -189,14 +197,14 @@ int command_buy(int trader_id, char *buffer)
     new_order.price = atoi(token);
     if (new_order.price <= 0 || new_order.price >= 1000000)
         return -1;
-    
+
     traders[trader_id].next_id++;
     char response[128];
     sprintf(response, "ACCEPTED %d;", new_order.order_id);
     current = trader_id;
     write(traders[trader_id].exfd, response, strlen(response));
     kill(traders[trader_id].pid, SIGUSR1);
-    
+
     char message[128];
     sprintf(message, "MARKET BUY %s %d %d;", new_order.name, new_order.qty, new_order.price);
     notify_except(trader_id, message);
@@ -285,7 +293,7 @@ int command_amended(int trader_id, char *buffer)
     int price = atoi(token);
     if (price <= 0 || price >= 1000000)
         return -1;
-    
+
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
         return -1;
@@ -321,11 +329,11 @@ int command_cancel(int trader_id, char *buffer)
     if (token == NULL)
         return -1;
     int order_id = atoi(token);
-    
+
     order_t *oldorder = order_find(trader_id, order_id);
     if (oldorder == NULL)
         return -1;
-    
+
     order_t new_order = *oldorder;
     remove_order(trader_id, order_id);
 
@@ -333,7 +341,7 @@ int command_cancel(int trader_id, char *buffer)
     sprintf(message, "CANCELLED %d;", order_id);
     write(traders[trader_id].exfd, message, strlen(message));
     kill(traders[trader_id].pid, SIGUSR1);
-    
+
     if (new_order.buy)
         sprintf(message, "MARKET BUY %s 0 0;", new_order.name);
     else

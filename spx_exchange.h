@@ -24,7 +24,7 @@ typedef struct Order {
 
 
 typedef struct Product {
-    char name[16];
+    char name[20];
 } product_t;
 
 

@@ -4,3 +4,5 @@ spx_test_trader
 *.tar
 *.zip
 tarder*
+.gdbinit
+tags

@@ -597,15 +597,6 @@ int main(int argc, char **argv) {
     sigaction(SIGPIPE, &sc, NULL);
 
     startup(argc, argv);
-    
-    FILE *f = fopen("input.txt", "r");
-    char command[128] = {0};
-    while (fgets(command, 128, f)) {
-        if (strstr(command, "quit"))
-            break;
-        command[strlen(command) - 1] = 0; // remove \n
-        notify_all(command);
-    }
 
     main_loop();
 
@@ -758,6 +749,7 @@ void notify_except(int id, char *message)
 void wait_all()
 {
     for (int i = 0; i < trader_num; ++i) {
+        kill(traders[i].pid, SIGKILL);
         waitpid(traders[i].pid, NULL, 0);
         clean_pipe(i);
     }
